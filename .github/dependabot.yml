@@ -3,20 +3,32 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
+    open-pull-requests-limit: 5
     groups:
-      patch-updates:
+      compatible-updates:
         patterns:
           - "*"
         update-types:
           - "patch"
-      minor-updates:
-        patterns:
-          - "*"
-        update-types:
           - "minor"
     pull-request-branch-name:
       separator: "-"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    groups:
+      action-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+          - "minor"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
