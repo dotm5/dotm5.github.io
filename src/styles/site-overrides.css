@@ -1,0 +1,112 @@
+@tailwind components;
+
+@layer components {
+	:root {
+		--radius-large: 1.125rem;
+	}
+
+	html {
+		font-family:
+			Inter,
+			"Noto Sans SC",
+			"Source Han Sans SC",
+			"PingFang SC",
+			"Microsoft YaHei",
+			system-ui,
+			sans-serif;
+		text-rendering: optimizeLegibility;
+	}
+
+	body {
+		overflow-wrap: anywhere;
+		background-image:
+			radial-gradient(circle at 15% 0%, oklch(0.82 0.08 var(--hue) / 0.22), transparent 32rem),
+			radial-gradient(circle at 90% 15%, oklch(0.8 0.07 195 / 0.16), transparent 28rem);
+		background-attachment: fixed;
+	}
+
+	.card-base {
+		border: 1px solid oklch(0.65 0.03 var(--hue) / 0.13);
+		box-shadow: 0 18px 50px rgb(15 23 42 / 0.07);
+		backdrop-filter: blur(18px);
+	}
+
+	.dark .card-base {
+		border-color: rgb(255 255 255 / 0.08);
+		box-shadow: 0 18px 60px rgb(0 0 0 / 0.18);
+	}
+
+	.custom-md {
+		font-size: clamp(1rem, 0.96rem + 0.18vw, 1.075rem);
+		line-height: 1.82;
+	}
+
+	.custom-md :where(p, li, blockquote) {
+		line-height: 1.82;
+	}
+
+	.custom-md :where(pre, table, img, video, iframe),
+	.expressive-code {
+		max-width: 100%;
+	}
+
+	.custom-md table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	.custom-md :where(pre, .expressive-code) {
+		overflow-x: auto;
+	}
+
+	.custom-md img {
+		height: auto;
+	}
+
+	:where(a, button, input, select, textarea):focus-visible {
+		outline: 3px solid oklch(0.72 0.14 var(--hue));
+		outline-offset: 3px;
+	}
+
+	.project-card {
+		@apply relative flex min-h-56 flex-col p-6;
+	}
+
+	.project-status {
+		@apply mb-5 inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-bold tracking-wide;
+		background: var(--btn-regular-bg);
+		color: var(--btn-content);
+	}
+
+	.project-link {
+		@apply mt-auto inline-flex w-fit items-center rounded-lg px-3 py-2 font-bold;
+		color: var(--primary);
+		background: var(--btn-plain-bg-hover);
+	}
+}
+
+@media (max-width: 640px) {
+	.custom-md {
+		font-size: 1rem;
+	}
+
+	.custom-md :where(h1, h2, h3) {
+		overflow-wrap: anywhere;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

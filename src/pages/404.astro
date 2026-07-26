@@ -1,0 +1,33 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+import { url } from "../utils/url-utils";
+---
+
+<MainGridLayout
+	title="页面未找到"
+	description="你访问的页面不存在、已移动，或地址输入有误。"
+>
+	<section class="card-base mb-4 px-6 py-12 text-center md:px-9 md:py-16">
+		<p class="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
+			404
+		</p>
+		<h1 class="mb-4 text-3xl font-bold text-90 md:text-4xl">这里暂时没有内容</h1>
+		<p class="mx-auto mb-8 max-w-xl text-75">
+			页面可能已经移动，或者链接仍在整理中。你可以返回首页、浏览归档，或使用顶部搜索。
+		</p>
+		<div class="flex flex-wrap justify-center gap-3">
+			<a class="btn-regular gap-2 rounded-xl px-5 py-3 font-bold" href={url("/")}>
+				<Icon name="material-symbols:home-outline-rounded" class="text-xl" />
+				返回首页
+			</a>
+			<a
+				class="btn-regular gap-2 rounded-xl px-5 py-3 font-bold"
+				href={url("/archive/")}
+			>
+				<Icon name="material-symbols:archive-outline-rounded" class="text-xl" />
+				前往归档
+			</a>
+		</div>
+	</section>
+</MainGridLayout>

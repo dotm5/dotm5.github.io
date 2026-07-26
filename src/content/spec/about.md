@@ -1,9 +1,16 @@
-# About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+# 关于
 
-::github{repo="saicaca/fuwari"}
+这里是 **图形与创作笔记**。本站用于记录三维创作、实时渲染、Shader、Unreal Engine、AI，以及围绕这些主题形成的个人工具和可复现实验。
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+## 内容原则
+
+- 尽量给出能够重复执行的步骤、版本和关键参数。
+- 保留实验中的假设、失败路径与适用限制。
+- 区分可核验事实、观察结果和个人判断。
+- 不用占位包装虚构项目，也不公开不必要的个人隐私。
+
+## 联系
+
+目前可通过 [GitHub](https://github.com/dotm5) 查看公开项目。其他联系方式稍后补充。
+
+本站代码基于 Fuwari 的 MIT 许可版本维护；文章与图片默认保留所有权利，除非具体页面另有说明。

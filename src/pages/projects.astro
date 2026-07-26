@@ -1,0 +1,70 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+import { url } from "../utils/url-utils";
+
+const projects = [
+	{
+		title: "图形与渲染实验",
+		description:
+			"整理 Blender、Eevee / Cycles、NPR、实时渲染与 Shader 分析中的可复现实验。",
+		status: "持续整理",
+		icon: "material-symbols:deployed-code-outline",
+	},
+	{
+		title: "个人工具与工作流",
+		description:
+			"记录为内容制作、资产处理和本地自动化编写的小工具、脚本与流程说明。",
+		status: "建设中",
+		icon: "material-symbols:build-outline-rounded",
+	},
+	{
+		title: "学习笔记与可复现实验",
+		description:
+			"保留图形学、Unreal Engine、AI 与生成式工具学习过程中的假设、限制和验证步骤。",
+		status: "持续更新",
+		icon: "material-symbols:experiment-outline",
+	},
+];
+---
+
+<MainGridLayout
+	title="项目"
+	description="图形、渲染、个人工具与可复现实验的长期项目索引。"
+>
+	<section class="mb-4" aria-labelledby="projects-heading">
+		<div class="card-base mb-4 px-6 py-7 md:px-9">
+			<p class="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
+				Projects
+			</p>
+			<h1 id="projects-heading" class="mb-3 text-3xl font-bold text-90">
+				项目与实验
+			</h1>
+			<p class="max-w-2xl text-75">
+				这里是公开项目和长期实验的索引。首轮只建立清晰结构，后续内容会随着真实进展逐步补充。
+			</p>
+		</div>
+
+		<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+			{
+				projects.map((project) => (
+					<article class="card-base project-card">
+						<div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--btn-regular-bg)] text-[var(--primary)]">
+							<Icon name={project.icon} class="text-3xl" />
+						</div>
+						<span class="project-status">{project.status}</span>
+						<h2 class="mb-3 text-xl font-bold text-90">{project.title}</h2>
+						<p class="mb-6 text-75">{project.description}</p>
+						<a class="project-link" href={url("/archive/")}>
+							查看相关笔记
+							<Icon
+								name="material-symbols:arrow-forward-rounded"
+								class="ml-2 text-lg"
+							/>
+						</a>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</MainGridLayout>

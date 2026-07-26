@@ -1,9 +1,6 @@
 ---
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import GlobalStyles from "@components/GlobalStyles.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -29,6 +26,9 @@ interface Props {
 }
 
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
+const siteBase = Astro.site ?? new URL(Astro.url.origin);
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const defaultOgImage = new URL(url("/branding/og-default.png"), siteBase);
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 // Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
@@ -51,8 +51,9 @@ let pageTitle: string;
 if (title) {
 	pageTitle = `${title} - ${siteConfig.title}`;
 } else {
-	pageTitle = `${siteConfig.title} - ${siteConfig.subtitle}`;
+	pageTitle = `${siteConfig.title} · ${siteConfig.subtitle}`;
 }
+const metaDescription = description?.trim() || siteConfig.subtitle;
 
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
@@ -77,17 +78,24 @@ const bannerOffset =
 	  data-overlayscrollbars-initialize
 >
 	<head>
+		<GlobalStyles />
 
 		<title>{pageTitle}</title>
 
 		<meta charset="UTF-8" />
-		<meta name="description" content={description || pageTitle}>
+		<meta name="description" content={metaDescription}>
 		<meta name="author" content={profileConfig.name}>
+		<meta name="theme-color" content="#f3f6fb" media="(prefers-color-scheme: light)">
+		<meta name="theme-color" content="#171a24" media="(prefers-color-scheme: dark)">
+		<link rel="canonical" href={canonicalURL}>
 
 		<meta property="og:site_name" content={siteConfig.title}>
-		<meta property="og:url" content={Astro.url}>
+		<meta property="og:url" content={canonicalURL}>
 		<meta property="og:title" content={pageTitle}>
-		<meta property="og:description" content={description || pageTitle}>
+		<meta property="og:description" content={metaDescription}>
+		<meta property="og:locale" content={siteConfig.lang}>
+		<meta property="og:image" content={defaultOgImage}>
+		<meta property="og:image:alt" content="图形与创作笔记的抽象节点与光环图形">
 		{setOGTypeArticle ? (
         <meta property="og:type" content="article" />
         ) : (
@@ -95,11 +103,13 @@ const bannerOffset =
         )}
 
 		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:url" content={Astro.url}>
+		<meta property="twitter:url" content={canonicalURL}>
 		<meta name="twitter:title" content={pageTitle}>
-		<meta name="twitter:description" content={description || pageTitle}>
+		<meta name="twitter:description" content={metaDescription}>
+		<meta name="twitter:image" content={defaultOgImage}>
+		<meta name="twitter:image:alt" content="图形与创作笔记的抽象节点与光环图形">
 
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{favicons.map(favicon => (
 			<link rel="icon"
@@ -108,6 +118,7 @@ const bannerOffset =
 				  media={favicon.theme && `(prefers-color-scheme: ${favicon.theme})`}
 			/>
 		))}
+		<link rel="apple-touch-icon" href={url("/favicon/apple-touch-icon.png")} sizes="180x180">
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
@@ -145,7 +156,7 @@ const bannerOffset =
 
 		<slot name="head"></slot>
 
-		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
+		<link rel="alternate" type="application/rss+xml" title={siteConfig.title} href={new URL(url("/rss.xml"), siteBase)}/>
 
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
@@ -269,7 +280,7 @@ function setClickOutsideToClose(panel: string, ignores: string[]) {
 				return;
 			}
 		}
-		panelDom!.classList.add("float-panel-closed");
+		panelDom?.classList.add("float-panel-closed");
 	});
 }
 setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"])

@@ -1,7 +1,9 @@
 {
-  "name": "fuwari",
+  "name": "dotm5-blog",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
+  "description": "图形、渲染、Shader、AI 与个人工具实验的中文静态博客",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,13 +13,19 @@
     "astro": "astro",
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "new-post": "node scripts/new-post.js",
-    "format": "biome format --write ./src",
-    "lint": "biome check --write ./src",
+    "new-post:dir": "node scripts/new-post-dir.mjs",
+    "generate:assets": "node scripts/generate-brand-assets.mjs",
+    "format": "biome format --write ./src ./scripts",
+    "format:check": "biome format ./scripts ./src/config.ts ./src/content/config.ts ./src/pages/projects.astro ./src/pages/404.astro",
+    "lint": "biome check --write ./src ./scripts",
+    "lint:check": "biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts",
+    "validate:dist": "node scripts/validate-dist.mjs",
+    "verify": "astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
-    "@astrojs/rss": "^4.0.14",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/svelte": "7.2.3",
     "@astrojs/tailwind": "^6.0.2",
@@ -33,7 +41,7 @@
     "@iconify/svelte": "^4.2.0",
     "@swup/astro": "^1.7.0",
     "@tailwindcss/typography": "^0.5.19",
-    "astro": "5.13.10",
+    "astro": "5.18.2",
     "astro-expressive-code": "^0.41.4",
     "astro-icon": "^1.1.5",
     "hastscript": "^9.0.1",
@@ -72,5 +80,11 @@
     "postcss-import": "^16.1.1",
     "postcss-nesting": "^13.0.2"
   },
-  "packageManager": "pnpm@9.14.4"
+  "packageManager": "pnpm@9.14.4",
+  "pnpm": {
+    "overrides": {
+      "@iconify/tools": "4.2.0",
+      "postcss": "8.5.18"
+    }
+  }
 }
