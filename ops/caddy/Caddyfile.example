@@ -1,0 +1,27 @@
+blog.example.com {
+	root * /srv/blog/current
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		-Server
+	}
+
+	@immutable path /_astro/* /pagefind/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	@pages {
+		not path /_astro/* /pagefind/*
+	}
+	header @pages Cache-Control "public, max-age=300, must-revalidate"
+
+	try_files {path} {path}/index.html =404
+	file_server
+
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}
