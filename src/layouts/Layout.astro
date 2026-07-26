@@ -38,6 +38,7 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
+const themeColorFixed = siteConfig.themeColor.fixed;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
@@ -85,8 +86,8 @@ const bannerOffset =
 		<meta charset="UTF-8" />
 		<meta name="description" content={metaDescription}>
 		<meta name="author" content={profileConfig.name}>
-		<meta name="theme-color" content="#f3f6fb" media="(prefers-color-scheme: light)">
-		<meta name="theme-color" content="#171a24" media="(prefers-color-scheme: dark)">
+		<meta name="theme-color" content="#f4eddc" media="(prefers-color-scheme: light)">
+		<meta name="theme-color" content="#1e191a" media="(prefers-color-scheme: dark)">
 		<link rel="canonical" href={canonicalURL}>
 
 		<meta property="og:site_name" content={siteConfig.title}>
@@ -121,7 +122,7 @@ const bannerOffset =
 		<link rel="apple-touch-icon" href={url("/favicon/apple-touch-icon.png")} sizes="180x180">
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, configHue}}>
+		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, configHue, themeColorFixed}}>
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -140,7 +141,8 @@ const bannerOffset =
 			}
 
 			// Load the hue from local storage
-			const hue = localStorage.getItem('hue') || configHue;
+			const hue = themeColorFixed ? configHue : (localStorage.getItem('hue') || configHue);
+			if (themeColorFixed) localStorage.removeItem('hue');
 			document.documentElement.style.setProperty('--hue', hue);
 
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text

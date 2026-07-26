@@ -1,0 +1,286 @@
+:root {
+	color-scheme: light;
+
+	/* Spring Folio: warm paper, quiet ink, and restrained editorial accents. */
+	--paper-canvas: #f4eddc;
+	--paper-surface: #fffaf0;
+	--paper-raised: #fffdf7;
+	--paper-soft: #ece2ce;
+	--paper-deep: #ddd0b8;
+
+	--ink-strong: #2f2925;
+	--ink: #4a423a;
+	--ink-muted: #6b625a;
+	--ink-faint: #8e8378;
+
+	--line-soft: rgb(93 77 59 / 16%);
+	--line-strong: rgb(93 77 59 / 28%);
+
+	--rose-wash: #f5dae3;
+	--rose-line: #e8b8c8;
+	--rose-ink: #994862;
+	--leaf-wash: #ddebda;
+	--leaf-line: #bdd8b8;
+	--leaf-ink: #46644b;
+	--sky-wash: #d8eef2;
+	--sky-line: #acd7de;
+	--sky-ink: #3e646b;
+	--sun-wash: #f3e4b5;
+	--sun-line: #dfc977;
+	--sun-ink: #80612b;
+	--danger-wash: #f1d1cc;
+	--danger-line: #dfaaa3;
+	--danger-ink: #8c4945;
+
+	--accent-solid: #9c4c68;
+	--accent-on-solid: #fffaf0;
+	--link: var(--rose-ink);
+	--link-hover-color: #7f3d55;
+	--focus-ring: var(--rose-ink);
+	--selection-bg: var(--rose-wash);
+	--selection-ink: var(--ink-strong);
+
+	--code-bg: #2d2826;
+	--code-ink: #f7eee3;
+	--inline-code-bg: #e9dfd0;
+	--inline-code-color: #7f3d55;
+
+	--field-rose: rgb(245 218 227 / 62%);
+	--field-leaf: rgb(221 235 218 / 52%);
+	--field-sky: rgb(216 238 242 / 38%);
+
+	--shadow-paper: 0 16px 50px rgb(77 57 37 / 8%);
+	--shadow-lifted: 0 24px 70px rgb(77 57 37 / 12%);
+
+	--font-display:
+		"Noto Serif SC Variable", "Noto Serif SC", "Source Han Serif SC", serif;
+	--font-body:
+		"Noto Sans SC Variable", "Noto Sans SC", "Source Han Sans SC",
+		"Microsoft YaHei", system-ui, sans-serif;
+	--font-ui:
+		Inter, "Noto Sans SC Variable", "Noto Sans SC", "Source Han Sans SC",
+		"PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+	--font-code:
+		"JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono",
+		monospace;
+	--font-math:
+		"KaTeX_Main", "Latin Modern Roman", "Computer Modern Serif",
+		"Times New Roman", serif;
+
+	/* Stable article/category accent contract. */
+	--accent-wash: var(--rose-wash);
+	--accent-line: var(--rose-line);
+	--accent-ink: var(--rose-ink);
+
+	/* Compatibility only: old component names resolve into the new system. */
+	--clay: var(--rose-ink);
+	--clay-deep: var(--link-hover-color);
+	--sage: var(--leaf-ink);
+	--ochre: var(--sun-ink);
+
+	/* Map Fuwari's upstream variables onto the fixed Spring Folio palette. */
+	--primary: var(--accent-solid);
+	--page-bg: var(--paper-canvas);
+	--card-bg: var(--paper-surface);
+	--btn-content: var(--rose-ink);
+	--btn-regular-bg: var(--rose-wash);
+	--btn-regular-bg-hover: color-mix(
+		in srgb,
+		var(--rose-wash) 72%,
+		var(--paper-surface)
+	);
+	--btn-regular-bg-active: var(--rose-line);
+	--btn-plain-bg-hover: color-mix(
+		in srgb,
+		var(--paper-soft) 76%,
+		transparent
+	);
+	--btn-plain-bg-active: color-mix(
+		in srgb,
+		var(--paper-deep) 72%,
+		transparent
+	);
+	--btn-card-bg-hover: color-mix(
+		in srgb,
+		var(--paper-soft) 54%,
+		var(--paper-surface)
+	);
+	--btn-card-bg-active: var(--paper-soft);
+	--enter-btn-bg: var(--accent-wash);
+	--enter-btn-bg-hover: color-mix(
+		in srgb,
+		var(--accent-wash) 76%,
+		var(--paper-surface)
+	);
+	--enter-btn-bg-active: var(--accent-line);
+
+	--deep-text: var(--ink-strong);
+	--title-active: var(--accent-ink);
+	--line-divider: var(--line-soft);
+	--line-color: var(--line-soft);
+	--meta-divider: var(--line-strong);
+
+	--codeblock-selection: rgb(245 218 227 / 28%);
+	--codeblock-bg: var(--code-bg);
+	--codeblock-topbar-bg: #393230;
+	--license-block-bg: var(--paper-soft);
+
+	--link-underline: color-mix(
+		in srgb,
+		var(--rose-ink) 30%,
+		transparent
+	);
+	--link-hover: color-mix(in srgb, var(--rose-wash) 72%, transparent);
+	--link-active: color-mix(in srgb, var(--rose-line) 62%, transparent);
+	--float-panel-bg: color-mix(
+		in srgb,
+		var(--paper-raised) 94%,
+		transparent
+	);
+
+	--scrollbar-bg-light: color-mix(
+		in srgb,
+		var(--ink-faint) 42%,
+		transparent
+	);
+	--scrollbar-bg-hover-light: color-mix(
+		in srgb,
+		var(--ink-muted) 54%,
+		transparent
+	);
+	--scrollbar-bg-active-light: color-mix(
+		in srgb,
+		var(--ink) 64%,
+		transparent
+	);
+	--scrollbar-bg: var(--scrollbar-bg-light);
+	--scrollbar-bg-hover: var(--scrollbar-bg-hover-light);
+	--scrollbar-bg-active: var(--scrollbar-bg-active-light);
+	--color-selection-bar: linear-gradient(
+		to right,
+		var(--rose-line),
+		var(--rose-ink)
+	);
+
+	--admonitions-color-tip: var(--leaf-ink);
+	--admonitions-color-note: var(--sky-ink);
+	--admonitions-color-important: var(--rose-ink);
+	--admonitions-color-warning: var(--sun-ink);
+	--admonitions-color-caution: var(--danger-ink);
+
+	--toc-badge-bg: var(--paper-soft);
+	--toc-btn-hover: color-mix(
+		in srgb,
+		var(--paper-soft) 72%,
+		transparent
+	);
+	--toc-btn-active: var(--paper-deep);
+	--toc-item-active: var(--accent-wash);
+}
+
+:root.dark {
+	color-scheme: dark;
+
+	--paper-canvas: #1e191a;
+	--paper-surface: #282123;
+	--paper-raised: #30272a;
+	--paper-soft: #352d2b;
+	--paper-deep: #44383a;
+
+	--ink-strong: #f4ebdd;
+	--ink: #ded3c7;
+	--ink-muted: #b9aca2;
+	--ink-faint: #8f8179;
+
+	--line-soft: rgb(244 235 221 / 12%);
+	--line-strong: rgb(244 235 221 / 22%);
+
+	--rose-wash: #4b303a;
+	--rose-line: #704958;
+	--rose-ink: #f0b8ca;
+	--leaf-wash: #304035;
+	--leaf-line: #49644e;
+	--leaf-ink: #b9d6b3;
+	--sky-wash: #2b3f44;
+	--sky-line: #43636a;
+	--sky-ink: #aad7de;
+	--sun-wash: #443a27;
+	--sun-line: #665630;
+	--sun-ink: #e2c87f;
+	--danger-wash: #49302f;
+	--danger-line: #6b4543;
+	--danger-ink: #e3aaa4;
+
+	--accent-solid: #d99aae;
+	--accent-on-solid: #21191c;
+	--link: var(--rose-ink);
+	--link-hover-color: #ffd5e1;
+	--focus-ring: var(--rose-ink);
+	--selection-bg: var(--rose-wash);
+	--selection-ink: var(--ink-strong);
+
+	--code-bg: #171416;
+	--code-ink: #f3e9dd;
+	--inline-code-bg: #392d31;
+	--inline-code-color: #f0b8ca;
+
+	--field-rose: rgb(75 48 58 / 52%);
+	--field-leaf: rgb(48 64 53 / 44%);
+	--field-sky: rgb(43 63 68 / 30%);
+
+	--shadow-paper: 0 18px 55px rgb(0 0 0 / 24%);
+	--shadow-lifted: 0 28px 80px rgb(0 0 0 / 34%);
+
+	--codeblock-selection: rgb(217 154 174 / 28%);
+	--codeblock-bg: var(--code-bg);
+	--codeblock-topbar-bg: #211c1f;
+	--license-block-bg: var(--paper-soft);
+
+	--scrollbar-bg: color-mix(
+		in srgb,
+		var(--ink-faint) 42%,
+		transparent
+	);
+	--scrollbar-bg-hover: color-mix(
+		in srgb,
+		var(--ink-muted) 54%,
+		transparent
+	);
+	--scrollbar-bg-active: color-mix(
+		in srgb,
+		var(--ink) 64%,
+		transparent
+	);
+}
+
+[data-accent="rose"] {
+	--accent-wash: var(--rose-wash);
+	--accent-line: var(--rose-line);
+	--accent-ink: var(--rose-ink);
+}
+
+[data-accent="leaf"] {
+	--accent-wash: var(--leaf-wash);
+	--accent-line: var(--leaf-line);
+	--accent-ink: var(--leaf-ink);
+}
+
+[data-accent="sky"] {
+	--accent-wash: var(--sky-wash);
+	--accent-line: var(--sky-line);
+	--accent-ink: var(--sky-ink);
+}
+
+[data-accent="sun"] {
+	--accent-wash: var(--sun-wash);
+	--accent-line: var(--sun-line);
+	--accent-ink: var(--sun-ink);
+}
+
+[data-accent] {
+	--primary: var(--accent-ink);
+	--btn-content: var(--accent-ink);
+	--title-active: var(--accent-ink);
+	--enter-btn-bg: var(--accent-wash);
+	--enter-btn-bg-active: var(--accent-line);
+}

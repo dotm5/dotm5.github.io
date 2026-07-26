@@ -15,13 +15,14 @@
     "new-post": "node scripts/new-post.js",
     "new-post:dir": "node scripts/new-post-dir.mjs",
     "generate:assets": "node scripts/generate-brand-assets.mjs",
+    "check:contrast": "node scripts/check-design-contrast.mjs",
     "validate:content": "node scripts/validate-content-safety.mjs",
     "format": "biome format --write ./src ./scripts",
     "format:check": "biome format ./scripts ./src/config.ts ./src/content/config.ts ./src/pages/projects.astro ./src/pages/404.astro",
     "lint": "biome check --write ./src ./scripts",
     "lint:check": "biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts",
     "validate:dist": "node scripts/validate-dist.mjs",
-    "verify": "node scripts/validate-content-safety.mjs && astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
+    "verify": "node scripts/validate-content-safety.mjs && node scripts/check-design-contrast.mjs && astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {

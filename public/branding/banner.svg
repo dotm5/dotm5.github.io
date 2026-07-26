@@ -1,28 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 760">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#edf2f8"/>
-      <stop offset=".5" stop-color="#e5ebf4"/>
-      <stop offset="1" stop-color="#dfe8ef"/>
-    </linearGradient>
-    <linearGradient id="line" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#63b8c9"/>
-      <stop offset="1" stop-color="#897bd2"/>
-    </linearGradient>
     <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
-      <path d="M64 0H0V64" fill="none" stroke="#334155" stroke-opacity=".055"/>
+      <path d="M64 0H0V64" fill="none" stroke="#5d4d3b" stroke-opacity=".055"/>
     </pattern>
   </defs>
-  <rect width="1920" height="760" fill="url(#bg)"/>
+  <rect width="1920" height="760" fill="#f4eddc"/>
+  <circle cx="180" cy="112" r="310" fill="#f5dae3" fill-opacity=".72"/>
+  <circle cx="1730" cy="590" r="350" fill="#ddebda" fill-opacity=".7"/>
+  <circle cx="1510" cy="24" r="220" fill="#d8eef2" fill-opacity=".52"/>
   <rect width="1920" height="760" fill="url(#grid)"/>
-  <ellipse cx="410" cy="360" rx="270" ry="270" fill="none" stroke="#60739a" stroke-opacity=".18" stroke-width="2"/>
-  <ellipse cx="1510" cy="335" rx="330" ry="215" fill="none" stroke="#60739a" stroke-opacity=".16" stroke-width="2"/>
-  <path d="M120 540C410 140 680 655 940 320s540 140 860-165" fill="none" stroke="url(#line)" stroke-opacity=".75" stroke-width="7"/>
-  <g fill="#f8fbff" stroke="url(#line)" stroke-width="7">
-    <circle cx="260" cy="392" r="18"/>
-    <circle cx="650" cy="484" r="15"/>
-    <circle cx="940" cy="320" r="21"/>
-    <circle cx="1322" cy="293" r="16"/>
-    <circle cx="1660" cy="222" r="19"/>
+  <ellipse cx="410" cy="360" rx="270" ry="270" fill="none" stroke="#46644b" stroke-opacity=".24" stroke-width="2"/>
+  <ellipse cx="1510" cy="335" rx="330" ry="215" fill="none" stroke="#9c4c68" stroke-opacity=".18" stroke-width="2"/>
+  <path d="M120 540C410 140 680 655 940 320s540 140 860-165" fill="none" stroke="#9c4c68" stroke-opacity=".82" stroke-width="7"/>
+  <g fill="#fffaf0" stroke-width="7">
+    <circle cx="260" cy="392" r="18" stroke="#46644b"/>
+    <circle cx="650" cy="484" r="15" stroke="#9c4c68"/>
+    <circle cx="940" cy="320" r="21" stroke="#3e646b"/>
+    <circle cx="1322" cy="293" r="16" stroke="#80612b"/>
+    <circle cx="1660" cy="222" r="19" stroke="#9c4c68"/>
   </g>
 </svg>

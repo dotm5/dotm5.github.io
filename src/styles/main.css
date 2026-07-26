@@ -35,11 +35,16 @@
         active:bg-[var(--btn-card-bg-active)]
     }
     .btn-card.disabled {
-        @apply pointer-events-none text-black/10 dark:text-white/10
+        @apply pointer-events-none;
+        color: var(--ink-faint);
+        opacity: 0.45;
     }
     .btn-plain {
-        @apply transition relative flex items-center justify-center bg-none
-        text-black/75 hover:text-[var(--primary)] dark:text-white/75 dark:hover:text-[var(--primary)];
+        @apply transition relative flex items-center justify-center bg-none;
+        color: var(--ink);
+        &:hover {
+            color: var(--accent-ink);
+        }
         &:not(.scale-animation) {
             @apply hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]
         }
@@ -51,8 +56,8 @@
         }
     }
     .btn-regular {
-        @apply transition flex items-center justify-center bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)]
-        text-[var(--btn-content)] dark:text-white/75
+        @apply transition flex items-center justify-center bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)];
+        color: var(--btn-content);
     }
 
     .link-underline {
@@ -78,19 +83,20 @@
     }
 
     .text-90 {
-        @apply text-black/90 dark:text-white/90
+        color: var(--ink-strong);
     }
     .text-75 {
-        @apply text-black/75 dark:text-white/75
+        color: var(--ink-strong);
     }
     .text-50 {
-        @apply text-black/50 dark:text-white/50
+        color: var(--ink-muted);
     }
     .text-30 {
-        @apply text-black/30 dark:text-white/30
+        color: var(--ink-faint);
     }
     .text-25 {
-        @apply text-black/25 dark:text-white/25
+        color: var(--ink-faint);
+        opacity: 0.82;
     }
 
     .meta-icon {
@@ -103,12 +109,13 @@
     }
 
     .btn-regular-dark {
-        @apply flex items-center justify-center
-        bg-[oklch(0.45_0.01_var(--hue))] hover:bg-[oklch(0.50_0.01_var(--hue))] active:bg-[oklch(0.55_0.01_var(--hue))]
-        dark:bg-[oklch(0.30_0.02_var(--hue))] dark:hover:bg-[oklch(0.35_0.03_var(--hue))] dark:active:bg-[oklch(0.40_0.03_var(--hue))]
+        @apply flex items-center justify-center;
+        color: var(--code-ink);
+        background: var(--code-bg);
     }
     .btn-regular-dark.success {
-        @apply bg-[oklch(0.75_0.14_var(--hue))] dark:bg-[oklch(0.75_0.14_var(--hue))]
+        color: var(--leaf-ink);
+        background: var(--leaf-wash);
     }
 }
 

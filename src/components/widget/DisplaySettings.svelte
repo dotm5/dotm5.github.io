@@ -19,7 +19,7 @@ $: if (hue || hue === 0) {
 
 <div id="display-setting" class="float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-4">
     <div class="flex flex-row gap-2 mb-3 items-center justify-between">
-        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+        <div class="flex gap-2 font-bold text-lg text-[var(--ink-strong)] transition relative ml-3
             before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
             before:absolute before:-left-3 before:top-[0.33rem]"
         >
@@ -38,7 +38,7 @@ $: if (hue || hue === 0) {
             </div>
         </div>
     </div>
-    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+    <div class="w-full h-6 px-1 bg-[var(--rose-wash)] border border-[var(--rose-line)] rounded select-none">
         <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
                class="slider" id="colorSlider" step="5" style="width: 100%">
     </div>
@@ -59,12 +59,12 @@ $: if (hue || hue === 0) {
           height 1rem
           width 0.5rem
           border-radius 0.125rem
-          background rgba(255, 255, 255, 0.7)
+          background var(--paper-surface)
           box-shadow none
           &:hover
-            background rgba(255, 255, 255, 0.8)
+            background var(--paper-raised)
           &:active
-            background rgba(255, 255, 255, 0.6)
+            background var(--paper-soft)
 
         &::-moz-range-thumb
           -webkit-appearance none
@@ -72,23 +72,23 @@ $: if (hue || hue === 0) {
           width 0.5rem
           border-radius 0.125rem
           border-width 0
-          background rgba(255, 255, 255, 0.7)
+          background var(--paper-surface)
           box-shadow none
           &:hover
-            background rgba(255, 255, 255, 0.8)
+            background var(--paper-raised)
           &:active
-            background rgba(255, 255, 255, 0.6)
+            background var(--paper-soft)
 
         &::-ms-thumb
           -webkit-appearance none
           height 1rem
           width 0.5rem
           border-radius 0.125rem
-          background rgba(255, 255, 255, 0.7)
+          background var(--paper-surface)
           box-shadow none
           &:hover
-            background rgba(255, 255, 255, 0.8)
+            background var(--paper-raised)
           &:active
-            background rgba(255, 255, 255, 0.6)
+            background var(--paper-soft)
 
 </style>

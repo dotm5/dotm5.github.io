@@ -230,9 +230,9 @@ const pageWidths: Record<LayoutWidth, number> = {
 	wide: 84,
 };
 const cardRadii: Record<CornerStyle, number> = {
-	compact: 0.75,
-	soft: 1.125,
-	round: 1.5,
+	compact: 0.5,
+	soft: 0.75,
+	round: 1,
 };
 const cardSurfaces: Record<
 	SurfaceStyle,
@@ -246,17 +246,17 @@ const cardSurfaces: Record<
 > = {
 	solid: {
 		blurPx: 0,
-		backgroundLight: "rgb(255 255 255)",
-		backgroundDark: "oklch(0.23 0.015 var(--hue))",
-		shadowLight: "0 12px 36px rgb(15 23 42 / 0.05)",
-		shadowDark: "0 12px 42px rgb(0 0 0 / 0.14)",
+		backgroundLight: "rgb(255 250 240)",
+		backgroundDark: "rgb(40 33 35)",
+		shadowLight: "0 16px 50px rgb(77 57 37 / 0.08)",
+		shadowDark: "0 18px 55px rgb(0 0 0 / 0.24)",
 	},
 	glass: {
-		blurPx: 18,
-		backgroundLight: "rgb(255 255 255 / 0.88)",
-		backgroundDark: "oklch(0.23 0.015 var(--hue) / 0.88)",
-		shadowLight: "0 18px 50px rgb(15 23 42 / 0.07)",
-		shadowDark: "0 18px 60px rgb(0 0 0 / 0.18)",
+		blurPx: 12,
+		backgroundLight: "rgb(255 250 240 / 0.91)",
+		backgroundDark: "rgb(40 33 35 / 0.91)",
+		shadowLight: "0 16px 50px rgb(77 57 37 / 0.08)",
+		shadowDark: "0 18px 55px rgb(0 0 0 / 0.24)",
 	},
 };
 
