@@ -1,11 +1,26 @@
 .custom-md
 
   blockquote.admonition
+    --callout-wash: var(--rose-wash)
+    --callout-line: var(--rose-line)
+    --callout-ink: var(--rose-ink)
+    margin: 1.25rem 0
+    padding: .9rem 1rem
+    color: var(--ink)
+    background: var(--callout-wash)
+    border: 1px solid var(--callout-line)
+    border-left: 4px solid var(--callout-ink)
+    border-radius: .6rem
+
+    &:before
+      display: none
+
     .bdm-title
       display: flex
       align-items: center
       margin-bottom: -.9rem
       font-weight: bold
+      color: var(--callout-ink)
 
       &:before
         content: ' '
@@ -21,6 +36,10 @@
         mask-repeat: no-repeat
         transform: translateY(-0.0625rem)
     &.bdm-tip
+      --callout-wash: var(--leaf-wash)
+      --callout-line: var(--leaf-line)
+      --callout-ink: var(--leaf-ink)
+
       .bdm-title
         color: var(--admonitions-color-tip)
 
@@ -31,6 +50,10 @@
       &:before
         background: var(--admonitions-color-tip)
     &.bdm-note
+      --callout-wash: var(--sky-wash)
+      --callout-line: var(--sky-line)
+      --callout-ink: var(--sky-ink)
+
       .bdm-title
         color: var(--admonitions-color-note)
 
@@ -41,6 +64,10 @@
       &:before
         background: var(--admonitions-color-note)
     &.bdm-important
+      --callout-wash: var(--rose-wash)
+      --callout-line: var(--rose-line)
+      --callout-ink: var(--rose-ink)
+
       .bdm-title
         color: var(--admonitions-color-important)
 
@@ -51,6 +78,10 @@
       &:before
         background: var(--admonitions-color-important)
     &.bdm-warning
+      --callout-wash: var(--sun-wash)
+      --callout-line: var(--sun-line)
+      --callout-ink: var(--sun-ink)
+
       .bdm-title
         color: var(--admonitions-color-warning)
 
@@ -61,6 +92,10 @@
       &:before
         background: var(--admonitions-color-warning)
     &.bdm-caution
+      --callout-wash: var(--danger-wash)
+      --callout-line: var(--danger-line)
+      --callout-ink: var(--danger-ink)
+
       .bdm-title
         color: var(--admonitions-color-caution)
 

@@ -34,10 +34,10 @@ const maxLevel = siteConfig.toc.depth;
 {isPostsRoute &&
 <table-of-contents class:list={[className, "group"]}>
     {headings.filter((heading) => heading.depth < minDepth + maxLevel).map((heading) =>
-            <a href={`#${heading.slug}`} class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl
+            <a href={`#${heading.slug}`} class="toc-entry px-2 flex gap-2 relative transition w-full min-h-9 rounded-lg
         hover:bg-[var(--toc-btn-hover)] active:bg-[var(--toc-btn-active)] py-2
     ">
-                <div class:list={["transition w-5 h-5 shrink-0 rounded-lg text-xs flex items-center justify-center font-bold",
+                <div class:list={["toc-badge transition w-5 h-5 shrink-0 rounded-md text-xs flex items-center justify-center font-bold",
                     {
                         "bg-[var(--toc-badge-bg)] text-[var(--btn-content)]": heading.depth == minDepth,
                         "ml-4": heading.depth == minDepth + 1,
@@ -47,7 +47,7 @@ const maxLevel = siteConfig.toc.depth;
                 >
                     {heading.depth == minDepth && heading1Count++}
                     {heading.depth == minDepth + 1 && <div class="transition w-2 h-2 rounded-[0.1875rem] bg-[var(--toc-badge-bg)]"></div>}
-                    {heading.depth == minDepth + 2 && <div class="transition w-1.5 h-1.5 rounded-sm bg-black/5 dark:bg-white/10"></div>}
+                    {heading.depth == minDepth + 2 && <div class="toc-dot transition w-1.5 h-1.5 rounded-sm"></div>}
                 </div>
                 <div class:list={["transition text-sm", {
                     "text-50": heading.depth == minDepth || heading.depth == minDepth + 1,
@@ -55,8 +55,7 @@ const maxLevel = siteConfig.toc.depth;
                 }]}>{removeTailingHash(heading.text)}</div>
             </a>
     )}
-    <div id="active-indicator" style="opacity: 0" class:list={[{'hidden': headings.length == 0}, "-z-10 absolute bg-[var(--toc-btn-hover)] left-0 right-0 rounded-xl transition-all " +
-        "group-hover:bg-transparent border-2 border-[var(--toc-btn-hover)] group-hover:border-[var(--toc-btn-active)] border-dashed"]}></div>
+    <div id="active-indicator" style="opacity: 0" class:list={[{'hidden': headings.length == 0}, "-z-10 absolute left-0 right-0 rounded-lg transition-all"]}></div>
 </table-of-contents>}
 
 <script>
@@ -96,6 +95,7 @@ class TableOfContents extends HTMLElement {
     };
 
     toggleActiveHeading = () => {
+        this.tocEntries.forEach((entry) => entry.removeAttribute("aria-current"));
         let i = this.active.length - 1;
         let min = this.active.length - 1, max = -1;
         while (i >= 0 && !this.active[i]) {
@@ -115,6 +115,7 @@ class TableOfContents extends HTMLElement {
         if (min > max) {
             this.activeIndicator?.setAttribute("style", `opacity: 0`);
         } else {
+            this.tocEntries[min].setAttribute("aria-current", "location");
             let parentOffset = this.tocEl?.getBoundingClientRect().top || 0;
             let scrollOffset = this.tocEl?.scrollTop || 0;
             let top = this.tocEntries[min].getBoundingClientRect().top - parentOffset + scrollOffset;

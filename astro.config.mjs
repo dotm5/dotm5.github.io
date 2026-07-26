@@ -90,9 +90,9 @@ export default defineConfig({
 					terminalTitlebarBorderBottomColor: "none"
 				},
 				textMarkers: {
-					delHue: 0,
-					insHue: 180,
-					markHue: 250
+					delHue: 5,
+					insHue: 135,
+					markHue: 345
 				}
 			},
 			frames: {

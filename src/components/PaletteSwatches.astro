@@ -1,0 +1,426 @@
+---
+const neutralSwatches = [
+	["Canvas", "var(--paper-canvas)", "#f4eddc"],
+	["Surface", "var(--paper-surface)", "#fffaf0"],
+	["Raised", "var(--paper-raised)", "#fffdf7"],
+	["Soft", "var(--paper-soft)", "#ece2ce"],
+	["Ink", "var(--ink-strong)", "#2f2925"],
+];
+
+const semanticSwatches = [
+	["Rose", "var(--rose-wash)", "var(--rose-ink)"],
+	["Leaf", "var(--leaf-wash)", "var(--leaf-ink)"],
+	["Sky", "var(--sky-wash)", "var(--sky-ink)"],
+	["Sun", "var(--sun-wash)", "var(--sun-ink)"],
+	["Danger", "var(--danger-wash)", "var(--danger-ink)"],
+];
+---
+
+<section
+	class="palette-sandbox"
+	aria-labelledby="palette-sandbox-title"
+	data-pagefind-ignore
+>
+	<header class="palette-sandbox__header">
+		<p class="palette-sandbox__eyebrow">Spring Folio · 设计系统试验台</p>
+		<h2 id="palette-sandbox-title">春日书笺配色</h2>
+		<p>
+			米纸承载正文，玫瑰、叶绿、浅青与日光黄只用于建立语义和阅读节奏。
+		</p>
+	</header>
+
+	<div class="palette-sandbox__section">
+		<h3>纸张与墨色</h3>
+		<div class="palette-sandbox__swatches">
+			{
+				neutralSwatches.map(([name, color, value]) => (
+					<div class="palette-sandbox__swatch">
+						<span
+							class="palette-sandbox__color"
+							style={`--swatch-color: ${color}`}
+						></span>
+						<strong>{name}</strong>
+						<code>{value}</code>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="palette-sandbox__section">
+		<h3>语义色</h3>
+		<div class="palette-sandbox__swatches">
+			{
+				semanticSwatches.map(([name, wash, ink]) => (
+					<div
+						class="palette-sandbox__swatch palette-sandbox__swatch--semantic"
+						style={`--swatch-color: ${wash}; --swatch-ink: ${ink}`}
+					>
+						<span class="palette-sandbox__color" />
+						<strong>{name}</strong>
+						<span class="palette-sandbox__sample">Aa 文</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="palette-sandbox__section palette-sandbox__type">
+		<h3>字阶</h3>
+		<p class="palette-sandbox__display">图形、Shader 与创作手记</p>
+		<p class="palette-sandbox__body">
+			正文使用现代中文无衬线体，保持从容的行距、清晰字面与稳定识别性。
+		</p>
+		<p class="palette-sandbox__ui">UI Sans · 日期 / 分类 / 交互标签</p>
+		<code>const palette = "spring-folio";</code>
+	</div>
+
+	<div class="palette-sandbox__section">
+		<h3>按钮与标签</h3>
+		<div class="palette-sandbox__controls">
+			<button class="palette-button palette-button--solid" type="button">
+				主操作
+			</button>
+			<button class="palette-button palette-button--soft" type="button">
+				次操作
+			</button>
+			<button class="palette-button palette-button--plain" type="button">
+				文字操作
+			</button>
+			<span class="palette-tag" data-accent="rose">Blender</span>
+			<span class="palette-tag" data-accent="sky">Shader</span>
+			<span class="palette-tag" data-accent="leaf">Tools</span>
+			<span class="palette-tag" data-accent="sun">Notes</span>
+		</div>
+	</div>
+
+	<div class="palette-sandbox__section">
+		<h3>提示语义</h3>
+		<div class="palette-sandbox__callouts">
+			<aside class="palette-callout palette-callout--note">
+				<strong>信息</strong><span>浅青用于说明背景与补充上下文。</span>
+			</aside>
+			<aside class="palette-callout palette-callout--tip">
+				<strong>建议</strong><span>叶绿用于可执行的技巧与成功状态。</span>
+			</aside>
+			<aside class="palette-callout palette-callout--creative">
+				<strong>创作</strong><span>玫瑰用于创意重点与编辑批注。</span>
+			</aside>
+			<aside class="palette-callout palette-callout--warning">
+				<strong>注意</strong><span>日光黄提示需要留意的边界。</span>
+			</aside>
+			<aside class="palette-callout palette-callout--danger">
+				<strong>风险</strong><span>珊瑚色只保留给危险与破坏性动作。</span>
+			</aside>
+		</div>
+	</div>
+
+	<div class="palette-sandbox__section palette-sandbox__article-demo">
+		<span class="palette-sandbox__index-tab" aria-hidden="true">07</span>
+		<div>
+			<p class="palette-sandbox__eyebrow">ARTICLE INDEX</p>
+			<h3>文章索引签与页边批注</h3>
+			<p>
+				栏目色以窄签、细线与低饱和底色出现，不把整张卡片涂成彩色。
+			</p>
+			<pre><code>surface: paper;
+accent: semantic;
+motion: restrained;</code></pre>
+		</div>
+		<aside class="palette-sandbox__marginalia">
+			<span>页边批注</span>
+			正文保持中性，色彩只帮助定位。
+		</aside>
+	</div>
+</section>
+
+<style>
+	.palette-sandbox {
+		margin: 0 0 2rem;
+		padding: clamp(1rem, 3vw, 1.5rem);
+		color: var(--ink);
+		background: var(--paper-raised);
+		border: 1px solid var(--line-soft);
+		border-radius: 0.75rem;
+		box-shadow: var(--shadow-paper);
+		font-family: var(--font-ui);
+	}
+
+	.palette-sandbox__header {
+		max-width: 44rem;
+	}
+
+	.palette-sandbox h2,
+	.palette-sandbox h3,
+	.palette-sandbox__display {
+		color: var(--ink-strong);
+		font-family: var(--font-display);
+	}
+
+	.palette-sandbox h2 {
+		margin: 0.15rem 0 0.5rem;
+		font-size: clamp(1.65rem, 4vw, 2.25rem);
+	}
+
+	.palette-sandbox h3 {
+		margin: 0 0 0.75rem;
+		font-size: 1.15rem;
+	}
+
+	.palette-sandbox p {
+		margin: 0;
+	}
+
+	.palette-sandbox__eyebrow {
+		color: var(--rose-ink);
+		font-size: 0.72rem;
+		font-weight: 800;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.palette-sandbox__section {
+		margin-top: 1.4rem;
+		padding-top: 1.2rem;
+		border-top: 1px solid var(--line-soft);
+	}
+
+	.palette-sandbox__swatches {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+		gap: 0.65rem;
+	}
+
+	.palette-sandbox__swatch {
+		display: grid;
+		gap: 0.25rem;
+		min-width: 0;
+		padding: 0.55rem;
+		background: var(--paper-surface);
+		border: 1px solid var(--line-soft);
+		border-radius: 0.6rem;
+	}
+
+	.palette-sandbox__color {
+		display: block;
+		height: 3.25rem;
+		background: var(--swatch-color);
+		border: 1px solid var(--line-soft);
+		border-radius: 0.4rem;
+	}
+
+	.palette-sandbox__swatch code {
+		overflow: hidden;
+		color: var(--ink-muted);
+		font-size: 0.72rem;
+		text-overflow: ellipsis;
+	}
+
+	.palette-sandbox__swatch--semantic {
+		color: var(--swatch-ink);
+		background: var(--swatch-color);
+		border-color: var(--swatch-ink);
+	}
+
+	.palette-sandbox__swatch--semantic .palette-sandbox__color {
+		background: var(--swatch-ink);
+		border-color: transparent;
+	}
+
+	.palette-sandbox__sample {
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 700;
+	}
+
+	.palette-sandbox__type {
+		display: grid;
+		gap: 0.55rem;
+	}
+
+	.palette-sandbox__display {
+		font-size: clamp(1.35rem, 4vw, 2rem);
+		font-weight: 700;
+	}
+
+	.palette-sandbox__body {
+		max-width: 42rem;
+		font-family: var(--font-body);
+		font-size: 1.05rem;
+		line-height: 1.8;
+	}
+
+	.palette-sandbox__ui {
+		color: var(--ink-muted);
+		font-size: 0.82rem;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+	}
+
+	.palette-sandbox code,
+	.palette-sandbox pre {
+		font-family: var(--font-code);
+	}
+
+	.palette-sandbox__controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		align-items: center;
+	}
+
+	.palette-button,
+	.palette-tag {
+		border-radius: 0.55rem;
+		font-family: var(--font-ui);
+		font-size: 0.82rem;
+		font-weight: 750;
+	}
+
+	.palette-button {
+		min-height: 2.35rem;
+		padding: 0.55rem 0.9rem;
+		border: 1px solid transparent;
+	}
+
+	.palette-button--solid {
+		color: var(--accent-on-solid);
+		background: var(--accent-solid);
+	}
+
+	.palette-button--soft {
+		color: var(--rose-ink);
+		background: var(--rose-wash);
+		border-color: var(--rose-line);
+	}
+
+	.palette-button--plain {
+		color: var(--rose-ink);
+		background: transparent;
+		border-color: var(--line-strong);
+	}
+
+	.palette-tag {
+		padding: 0.35rem 0.65rem;
+		color: var(--accent-ink);
+		background: var(--accent-wash);
+		border: 1px solid var(--accent-line);
+	}
+
+	.palette-sandbox__callouts {
+		display: grid;
+		gap: 0.65rem;
+	}
+
+	.palette-callout {
+		--callout-wash: var(--rose-wash);
+		--callout-line: var(--rose-line);
+		--callout-ink: var(--rose-ink);
+		display: grid;
+		grid-template-columns: minmax(4rem, auto) 1fr;
+		gap: 0.7rem;
+		padding: 0.8rem 0.9rem;
+		color: var(--ink);
+		background: var(--callout-wash);
+		border: 1px solid var(--callout-line);
+		border-left: 4px solid var(--callout-ink);
+		border-radius: 0.6rem;
+	}
+
+	.palette-callout strong {
+		color: var(--callout-ink);
+	}
+
+	.palette-callout--note {
+		--callout-wash: var(--sky-wash);
+		--callout-line: var(--sky-line);
+		--callout-ink: var(--sky-ink);
+	}
+
+	.palette-callout--tip {
+		--callout-wash: var(--leaf-wash);
+		--callout-line: var(--leaf-line);
+		--callout-ink: var(--leaf-ink);
+	}
+
+	.palette-callout--warning {
+		--callout-wash: var(--sun-wash);
+		--callout-line: var(--sun-line);
+		--callout-ink: var(--sun-ink);
+	}
+
+	.palette-callout--danger {
+		--callout-wash: var(--danger-wash);
+		--callout-line: var(--danger-line);
+		--callout-ink: var(--danger-ink);
+	}
+
+	.palette-sandbox__article-demo {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(8rem, 12rem);
+		gap: 1rem;
+		padding-left: 1rem;
+	}
+
+	.palette-sandbox__index-tab {
+		position: absolute;
+		top: 1.2rem;
+		left: -1.5rem;
+		display: grid;
+		width: 2.25rem;
+		height: 2.75rem;
+		place-items: center;
+		color: var(--rose-ink);
+		background: var(--rose-wash);
+		border: 1px solid var(--rose-line);
+		border-radius: 0 0.45rem 0.45rem 0;
+		font-size: 0.72rem;
+		font-weight: 800;
+	}
+
+	.palette-sandbox__article-demo pre {
+		overflow-x: auto;
+		margin: 0.8rem 0 0;
+		padding: 0.85rem;
+		color: var(--code-ink);
+		background: var(--code-bg);
+		border-radius: 0.55rem;
+	}
+
+	.palette-sandbox__marginalia {
+		align-self: start;
+		padding: 0.75rem;
+		color: var(--sky-ink);
+		background: var(--sky-wash);
+		border-left: 3px solid var(--sky-ink);
+		border-radius: 0.45rem;
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		line-height: 1.55;
+	}
+
+	.palette-sandbox__marginalia span {
+		display: block;
+		margin-bottom: 0.3rem;
+		font-family: var(--font-ui);
+		font-size: 0.68rem;
+		font-weight: 800;
+		letter-spacing: 0.08em;
+	}
+
+	@media (max-width: 640px) {
+		.palette-callout {
+			grid-template-columns: 1fr;
+			gap: 0.2rem;
+		}
+
+		.palette-sandbox__article-demo {
+			grid-template-columns: 1fr;
+		}
+
+		.palette-sandbox__marginalia {
+			margin-top: 0.25rem;
+		}
+	}
+</style>

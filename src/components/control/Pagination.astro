@@ -65,13 +65,13 @@ const getPageUrl = (p: number) => {
             <Icon name="material-symbols:chevron-left-rounded" class="text-[1.75rem]"></Icon>
         </span>
     )}
-    <div class="bg-[var(--card-bg)] flex flex-row rounded-lg items-center text-neutral-700 dark:text-neutral-300 font-bold">
+    <div class="bg-[var(--card-bg)] flex flex-row rounded-lg items-center text-[var(--ink)] font-bold">
         {pages.map((p) => {
             if (p == HIDDEN)
                 return <Icon name="material-symbols:more-horiz" class="mx-1"/>;
             if (p == page.currentPage)
-                return <div class="h-11 w-11 rounded-lg bg-[var(--primary)] flex items-center justify-center
-                    font-bold text-white dark:text-black/70"
+                return <div class="h-11 w-11 rounded-lg bg-[var(--accent-solid)] text-[var(--accent-on-solid)] flex items-center justify-center
+                    font-bold"
                 >
                     {p}
                 </div>
