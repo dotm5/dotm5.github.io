@@ -1,0 +1,10 @@
+* @dotm5
+
+# Security-sensitive control plane and deployment files.
+/.github/ @dotm5
+/.pages.yml @dotm5
+/package.json @dotm5
+/pnpm-lock.yaml @dotm5
+/scripts/ @dotm5
+/src/config.ts @dotm5
+/src/config/ @dotm5

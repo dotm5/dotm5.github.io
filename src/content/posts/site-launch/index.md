@@ -3,7 +3,7 @@ title: "从这里开始：图形与创作笔记"
 published: 2026-07-26
 updated: 2026-07-26
 description: "说明这个博客会记录什么、如何验证内容，以及当前仍在建设的部分。"
-image: "./cover.webp"
+image: "/uploads/site-launch-cover.webp"
 imageAlt: "蓝紫色空间中的抽象节点、轨道与网格，中央写有图形与创作笔记"
 tags:
   - Site

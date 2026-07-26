@@ -5,20 +5,21 @@ import type {
 	ProfileConfig,
 	SiteConfig,
 } from "./types/config";
+import { siteSettings } from "./config/site-settings";
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "图形与创作笔记",
-	subtitle: "Blender · Rendering · Shader · AI",
-	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
+	title: siteSettings.site.title,
+	subtitle: siteSettings.site.subtitle,
+	lang: siteSettings.site.language,
 	themeColor: {
-		hue: 235, // Blue-violet accent for the site identity
-		fixed: true, // Keep the first-release palette consistent
+		hue: siteSettings.theme.hue,
+		fixed: siteSettings.theme.fixed,
 	},
 	banner: {
-		enable: true,
+		enable: siteSettings.banner.enabled,
 		src: "/branding/banner.svg", // Relative to /public because the path starts with '/'
-		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		position: siteSettings.banner.position,
 		credit: {
 			enable: false, // Display the credit text of the banner image
 			text: "", // Credit text to be displayed
@@ -26,8 +27,8 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	toc: {
-		enable: true, // Display the table of contents on the right side of the post
-		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
+		enable: siteSettings.content.tableOfContents,
+		depth: siteSettings.content.tocDepth,
 	},
 	favicon: [
 		{
@@ -52,13 +53,13 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "/branding/avatar.svg",
-	name: "Tao",
-	bio: "记录三维创作、实时渲染、Shader、AI 与个人工具实验。",
+	name: siteSettings.profile.name,
+	bio: siteSettings.profile.bio,
 	links: [
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/dotm5",
+			url: siteSettings.profile.githubUrl,
 		},
 	],
 };

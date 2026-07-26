@@ -60,6 +60,10 @@ if (await exists(path.join("posts", "style-sandbox", "index.html"))) {
 	failures.push("draft 文章 style-sandbox 被意外发布");
 }
 
+if ((await exists("admin")) || (await exists(".pages.yml"))) {
+	failures.push("CMS 管理面或配置文件被意外打包到公开站点");
+}
+
 const files = await walk(dist).catch(() => []);
 const htmlFiles = files.filter((file) => file.endsWith(".html"));
 const postPages = htmlFiles.filter((file) =>

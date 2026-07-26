@@ -15,12 +15,13 @@
     "new-post": "node scripts/new-post.js",
     "new-post:dir": "node scripts/new-post-dir.mjs",
     "generate:assets": "node scripts/generate-brand-assets.mjs",
+    "validate:content": "node scripts/validate-content-safety.mjs",
     "format": "biome format --write ./src ./scripts",
     "format:check": "biome format ./scripts ./src/config.ts ./src/content/config.ts ./src/pages/projects.astro ./src/pages/404.astro",
     "lint": "biome check --write ./src ./scripts",
     "lint:check": "biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts",
     "validate:dist": "node scripts/validate-dist.mjs",
-    "verify": "astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
+    "verify": "node scripts/validate-content-safety.mjs && astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
@@ -78,7 +79,8 @@
     "@types/mdast": "^4.0.4",
     "@types/sanitize-html": "^2.16.0",
     "postcss-import": "^16.1.1",
-    "postcss-nesting": "^13.0.2"
+    "postcss-nesting": "^13.0.2",
+    "yaml": "2.8.2"
   },
   "packageManager": "pnpm@9.14.4",
   "pnpm": {
