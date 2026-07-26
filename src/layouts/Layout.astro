@@ -2,6 +2,7 @@
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import GlobalStyles from "@components/GlobalStyles.astro";
 import { profileConfig, siteConfig } from "@/config";
+import { appearanceConfig } from "@/config/site-settings";
 import {
 	AUTO_MODE,
 	BANNER_HEIGHT,
@@ -10,7 +11,6 @@ import {
 	DARK_MODE,
 	DEFAULT_THEME,
 	LIGHT_MODE,
-	PAGE_WIDTH,
 } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
@@ -121,7 +121,7 @@ const bannerOffset =
 		<link rel="apple-touch-icon" href={url("/favicon/apple-touch-icon.png")} sizes="180x180">
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
+		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, configHue}}>
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -150,7 +150,13 @@ const bannerOffset =
 		</script>
 		<style define:vars={{
 			configHue,
-			'page-width': `${PAGE_WIDTH}rem`,
+			'page-width': `${appearanceConfig.pageWidthRem}rem`,
+			'cms-card-radius': `${appearanceConfig.cardRadiusRem}rem`,
+			'cms-card-blur': `${appearanceConfig.cardBlurPx}px`,
+			'cms-card-bg-light': appearanceConfig.cardBackgroundLight,
+			'cms-card-bg-dark': appearanceConfig.cardBackgroundDark,
+			'cms-card-shadow-light': appearanceConfig.cardShadowLight,
+			'cms-card-shadow-dark': appearanceConfig.cardShadowDark,
 		}}></style>  <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 
 

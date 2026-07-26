@@ -9,6 +9,7 @@
 - Markdown Content Collections
 - Svelte 交互组件
 - Pagefind 静态搜索
+- Pages CMS 托管写作后台（可选授权）
 - pnpm 9
 - GitHub Actions / GitHub Pages
 - 可选的 Caddy 静态服务器
@@ -41,6 +42,17 @@ corepack pnpm new-post:dir shader-notes
 命令会创建 `src/content/posts/shader-notes/index.md`、`images/` 目录，并将文章设为草稿。完整规则见 [docs/CONTENT_GUIDE.md](docs/CONTENT_GUIDE.md)。
 
 原有 `pnpm new-post` 命令仍被保留，但新内容建议使用 `new-post:dir`。
+
+## 图形化后台
+
+仓库已接入 [Pages CMS](https://app.pagescms.org/)：
+
+- 文章可使用所见即所得或 Markdown 源码编辑器。
+- 新文章默认草稿，关闭草稿开关后才进入生产站点。
+- 站点标题、简介、主题、横幅、目录和安全布局预设可在 GUI 中调整。
+- 后台独立于公开博客，不会在站点上增加 `/admin`、登录接口或数据库。
+
+首次使用只需由仓库所有者把 Pages CMS GitHub App 授权给 `dotm5/dotm5.github.io` 这一个仓库。权限模型、第三方信任边界与撤销方法见 [docs/CMS_ADMIN.md](docs/CMS_ADMIN.md)。
 
 ## 验证与构建
 

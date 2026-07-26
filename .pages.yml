@@ -1,0 +1,316 @@
+media:
+  - name: article_images
+    label: 文章图片
+    input: public/uploads
+    output: /uploads
+    extensions: [avif, gif, jpeg, jpg, png, webp]
+    rename: safe
+
+content:
+  - name: posts
+    label: 文章
+    description: 新文章默认保存为草稿；确认无误后关闭“草稿”开关即可发布。
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    subfolders: true
+    filename:
+      template: "{year}-{month}-{day}-post.md"
+      field: create
+    operations:
+      create: true
+      rename: false
+      delete: false
+    view:
+      layout: tree
+      node:
+        filename: index.md
+        hideDirs: others
+      fields: [title, published, draft, category]
+      primary: title
+      sort: [published, title]
+      search: [title, description, tags, category]
+      default:
+        sort: published
+        order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        options:
+          minlength: 1
+          maxlength: 120
+      - name: published
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: updated
+        label: 更新日期
+        type: date
+        required: true
+        description: 只有正文发生实质变化时才更新。
+        options:
+          format: yyyy-MM-dd
+      - name: description
+        label: 摘要
+        type: text
+        required: true
+        options:
+          minlength: 10
+          maxlength: 280
+      - name: image
+        label: 封面
+        type: image
+        description: 推荐 1600×900；新上传文件会写入 /uploads。
+        options:
+          media: article_images
+          extensions: [avif, gif, jpeg, jpg, png, webp]
+          rename: safe
+      - name: imageAlt
+        label: 封面替代文本
+        type: text
+        description: 有封面时请准确描述画面；纯装饰图片可留空。
+        options:
+          maxlength: 240
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        default: []
+        options:
+          maxlength: 40
+      - name: category
+        label: 分类
+        type: select
+        required: true
+        default: Notes
+        options:
+          values:
+            - name: Blender
+              label: Blender
+            - name: Rendering
+              label: Rendering
+            - name: Unreal Engine
+              label: Unreal Engine
+            - name: Shader
+              label: Shader
+            - name: AI
+              label: AI
+            - name: Projects
+              label: Projects
+            - name: Notes
+              label: Notes
+      - name: draft
+        label: 草稿
+        type: boolean
+        required: true
+        default: true
+        description: 开启时不会进入生产站点、RSS 或搜索索引。
+      - name: lang
+        label: 语言
+        type: select
+        required: true
+        default: zh_CN
+        options:
+          values:
+            - name: zh_CN
+              label: 简体中文
+            - name: zh_TW
+              label: 繁體中文
+            - name: en
+              label: English
+            - name: ja
+              label: 日本語
+            - name: ko
+              label: 한국어
+      - name: body
+        label: 正文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          switcher: true
+          media: article_images
+          extensions: [avif, gif, jpeg, jpg, png, webp]
+          rename: safe
+
+  - name: site_settings
+    label: 站点外观
+    description: 只提供经过校验的安全预设，不允许任意 CSS、脚本或外部链接。
+    type: file
+    path: src/data/site.json
+    format: json
+    operations:
+      create: false
+      rename: false
+      delete: false
+    fields:
+      - name: site
+        label: 站点信息
+        type: object
+        required: true
+        fields:
+          - name: title
+            label: 站点标题
+            type: string
+            required: true
+            options:
+              minlength: 1
+              maxlength: 60
+          - name: subtitle
+            label: 副标题
+            type: string
+            required: true
+            options:
+              minlength: 1
+              maxlength: 120
+          - name: language
+            label: 默认语言
+            type: select
+            required: true
+            options:
+              values:
+                - name: zh_CN
+                  label: 简体中文
+                - name: zh_TW
+                  label: 繁體中文
+                - name: en
+                  label: English
+                - name: ja
+                  label: 日本語
+                - name: ko
+                  label: 한국어
+      - name: profile
+        label: 个人资料
+        type: object
+        required: true
+        fields:
+          - name: name
+            label: 显示名称
+            type: string
+            required: true
+            options:
+              minlength: 1
+              maxlength: 40
+          - name: bio
+            label: 简介
+            type: text
+            required: true
+            options:
+              minlength: 1
+              maxlength: 240
+          - name: githubUrl
+            label: GitHub 主页
+            type: string
+            required: true
+            pattern:
+              regex: '^https://github\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/?$'
+              message: 只允许 GitHub HTTPS 个人主页。
+      - name: theme
+        label: 主题
+        type: object
+        required: true
+        fields:
+          - name: hue
+            label: 主题色相
+            type: number
+            required: true
+            options:
+              min: 0
+              max: 360
+          - name: fixed
+            label: 锁定主题色
+            type: boolean
+            required: true
+            description: 关闭后，访客只能在自己的浏览器本地调整色相。
+      - name: banner
+        label: 横幅
+        type: object
+        required: true
+        fields:
+          - name: enabled
+            label: 显示横幅
+            type: boolean
+            required: true
+          - name: position
+            label: 图片对齐
+            type: select
+            required: true
+            options:
+              values:
+                - name: top
+                  label: 顶部
+                - name: center
+                  label: 居中
+                - name: bottom
+                  label: 底部
+      - name: content
+        label: 阅读
+        type: object
+        required: true
+        fields:
+          - name: tableOfContents
+            label: 显示目录
+            type: boolean
+            required: true
+          - name: tocDepth
+            label: 目录层级
+            type: number
+            required: true
+            options:
+              min: 1
+              max: 3
+      - name: layout
+        label: 布局预设
+        type: object
+        required: true
+        fields:
+          - name: width
+            label: 内容宽度
+            type: select
+            required: true
+            options:
+              values:
+                - name: compact
+                  label: 紧凑
+                - name: balanced
+                  label: 均衡
+                - name: wide
+                  label: 宽阔
+          - name: corners
+            label: 卡片圆角
+            type: select
+            required: true
+            options:
+              values:
+                - name: compact
+                  label: 小圆角
+                - name: soft
+                  label: 柔和
+                - name: round
+                  label: 大圆角
+          - name: surface
+            label: 卡片质感
+            type: select
+            required: true
+            options:
+              values:
+                - name: solid
+                  label: 清晰
+                - name: glass
+                  label: 玻璃
+
+settings:
+  hide: true
+  content:
+    merge: true
+  commit:
+    identity: app
+    templates:
+      create: "content(cms): create {path}"
+      update: "content(cms): update {path}"
+      delete: "content(cms): delete {path}"
+      rename: "content(cms): rename {oldPath} -> {newPath}"

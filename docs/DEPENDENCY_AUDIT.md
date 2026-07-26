@@ -43,3 +43,17 @@ corepack pnpm audit --prod
 - Dependabot 每月检查 npm/pnpm 与 Actions 更新，major 单独评估。
 - 后续在独立分支评估 Sharp 0.35、Astro 6 及旧 Swup 构建链替换。
 - 若未来加入不可信内容上传或服务器端渲染，必须重新评估本报告，不能沿用当前静态站风险判断。
+
+## Pages CMS 接入复核
+
+同日接入 Pages CMS 后重新执行：
+
+```bash
+corepack pnpm audit --prod
+```
+
+结果为 critical 0、high 41、moderate 26、low 5。新增的直接依赖 `yaml@2.8.2` 未增加 high 或 critical 告警；高危项仍来自 Astro/Vite/Sharp、旧 Swup 构建链及其传递依赖。
+
+CMS 没有改变生产形态：访客仍只访问静态文件。新上传图片固定写入 `public/uploads` 并按静态资源原样发布，不经过 Sharp 转码；提交前验证会拒绝非图片扩展、单文件超过 4 MiB、目录总量超限、危险原始 HTML 和脚本 URL。Pages CMS 邮箱协作者必须视为可信发布者，不能当作不受信任的访客上传入口。
+
+GitHub 的 Dependabot 月度版本更新配置存在，但仓库级 Vulnerability alerts / Dependabot security updates 当前未启用。是否开启属于仓库管理策略变更，本次只记录状态，没有代替所有者修改。

@@ -1,0 +1,29 @@
+{
+  "site": {
+    "title": "图形与创作笔记",
+    "subtitle": "Blender · Rendering · Shader · AI",
+    "language": "zh_CN"
+  },
+  "profile": {
+    "name": "Tao",
+    "bio": "记录三维创作、实时渲染、Shader、AI 与个人工具实验。",
+    "githubUrl": "https://github.com/dotm5"
+  },
+  "theme": {
+    "hue": 235,
+    "fixed": true
+  },
+  "banner": {
+    "enabled": true,
+    "position": "center"
+  },
+  "content": {
+    "tableOfContents": true,
+    "tocDepth": 2
+  },
+  "layout": {
+    "width": "balanced",
+    "corners": "soft",
+    "surface": "glass"
+  }
+}
