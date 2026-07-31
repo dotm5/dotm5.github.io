@@ -32,3 +32,6 @@ yarn.lock
 # ide
 .idea
 *.iml
+
+# local Codex project context
+/codex.md

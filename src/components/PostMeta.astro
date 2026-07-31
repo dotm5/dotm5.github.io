@@ -61,18 +61,19 @@ const className = Astro.props.class;
     </div>
 
     <!-- tags -->
-    <div class:list={["items-center", {"flex": !hideTagsForMobile, "hidden md:flex": hideTagsForMobile}]}>
-        <div class="meta-icon"
+    <div class:list={["w-full min-w-0 items-start md:w-auto", {"flex": !hideTagsForMobile, "hidden md:flex": hideTagsForMobile}]}>
+        <div class="meta-icon shrink-0"
         >
             <Icon name="material-symbols:tag-rounded" class="text-xl"></Icon>
         </div>
-        <div class="flex flex-row flex-nowrap items-center">
-            {(tags && tags.length > 0) && tags.map((tag, i) => (
-                <div class:list={[{"hidden": i == 0}, "mx-1.5 text-[var(--meta-divider)] text-sm"]}>/</div>
-                <a href={getTagUrl(tag)} aria-label={`View all posts with the ${tag.trim()} tag`}
-                   class="meta-link link-lg transition text-sm font-medium whitespace-nowrap">
-                    {tag.trim()}
-                </a>
+        <div class="flex min-w-0 flex-1 flex-row flex-wrap items-center gap-x-2 gap-y-1">
+            {(tags && tags.length > 0) && tags.map(tag => (
+                <span class="inline-flex items-center whitespace-nowrap">
+                    <a href={getTagUrl(tag)} aria-label={`View all posts with the ${tag.trim()} tag`}
+                       class="meta-link link-lg transition text-sm font-medium whitespace-nowrap">
+                        {tag.trim()}
+                    </a>
+                </span>
             ))}
             {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}
         </div>

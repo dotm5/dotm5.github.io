@@ -1,0 +1,646 @@
+{
+  "case_id": "wuwa-xigelika-runtime-analysis-blog",
+  "counts": {
+    "families": {
+      "ToonCommon": 3,
+      "ToonFace": 2,
+      "ToonHair": 2
+    },
+    "materials": 7
+  },
+  "materials": [
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 195,
+        "shading_model": "MSM_ToonHair",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "0_HairMaskChannel": 0.0,
+        "0_Position": 0.55,
+        "0_Width": 0.12,
+        "1_HairMaskChannel": 1.0,
+        "1_Position": 0.504762,
+        "1_Width": 0.152381,
+        "2_HairMaskChannel": 1.0,
+        "2_Position": 0.46,
+        "2_Width": 0.0,
+        "DamageIntensity": 0.0,
+        "RampInt": 0.3,
+        "ShadowProcess": 0.7,
+        "ShadowWidth": 0.03,
+        "SpecStrength": 0.03,
+        "ToonRimWidth": 0.02
+      },
+      "configured_switches_false": [
+        "UseAllRampColor",
+        "UseMainTexA"
+      ],
+      "configured_switches_true": [
+        "UseHairHighlight",
+        "UseHairVCGradient",
+        "UseHueShift",
+        "UseNormalTex",
+        "UseRampColor",
+        "UseSphereGradient",
+        "UseToonMask",
+        "UseToonSpecular",
+        "UseTypeMask",
+        "UseUVGradient"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonHair",
+      "material_file": "MI_R2T1XigelikaMd10011Bangs.json",
+      "material_role": "Bangs",
+      "material_sha256": "19E0709550A0D265A7F577189A8AB8C9E438532E354CC05BEF2BE71C482847D1",
+      "runtime_events": [
+        {
+          "claim_status": "inferred",
+          "event_frame72751": 541,
+          "event_frame73414": 860,
+          "fidelity_status": "approximation",
+          "role": "face-local bangs control mask",
+          "stage": "BasePass control-mask write"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 560,
+          "event_frame73414": 879,
+          "fidelity_status": "exact",
+          "role": "bangs stencil partition A",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 582,
+          "event_frame73414": 901,
+          "fidelity_status": "exact",
+          "role": "bangs stencil partition B",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 642,
+          "event_frame73414": 961,
+          "fidelity_status": "exact",
+          "role": "bangs inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_HairNoise02_M",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Bangs_D",
+        "T_R2T1XigelikaMd10011Bangs_FTM",
+        "T_R2T1XigelikaMd10011Bangs_HM",
+        "T_R2T1XigelikaMd10011Bangs_HN",
+        "T_R2T1XigelikaMd10011Hair_HR"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [
+        {
+          "hex_display": "00FFFF",
+          "linear_rgba": [
+            0.0,
+            2.799997,
+            3.0,
+            0.0
+          ],
+          "name": "EmissionColor"
+        }
+      ],
+      "configured_override": {
+        "blend_mode": "BLEND_Masked",
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 180,
+        "shading_model": "MSM_ToonCommon",
+        "two_sided": true
+      },
+      "configured_selected_scalars": {
+        "0_RampID": 2.0,
+        "0_RampInt": 0.2,
+        "1_RampID": 2.0,
+        "1_RampInt": 1.0,
+        "2_RampID": 2.0,
+        "2_RampInt": 0.2,
+        "3_RampID": 2.0,
+        "3_RampInt": 0.2,
+        "4_RampID": 2.0,
+        "4_RampInt": 0.2,
+        "DamageIntensity": 0.0,
+        "Effect_Progress": 0.0,
+        "MetalSpecularPower": 8.0,
+        "RampInt": 0.0,
+        "ShadowProcess": 0.55,
+        "ShadowWidth": 0.1,
+        "SpecularPower": 8.0
+      },
+      "configured_switches_false": [
+        "DebugID",
+        "Second_UseObjectScreenUV",
+        "UseVectorMaskChannel"
+      ],
+      "configured_switches_true": [
+        "UseAlphaBlendMode",
+        "UseBlendParameter",
+        "UseBumpOffset",
+        "UseEffectMaterial",
+        "UseHueShift",
+        "UseMainTexA",
+        "UseMatCap",
+        "UseNormalMap",
+        "UseNormalTex",
+        "UsePBR",
+        "UseRampColor",
+        "UseRampIDMask",
+        "UseRegionID",
+        "UseSecond",
+        "UseToonMask",
+        "UseTranslucent",
+        "UseTypeMask",
+        "UseUVGradient"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonCommon",
+      "material_file": "MI_R2T1XigelikaMd10011Cloth.json",
+      "material_role": "Cloth",
+      "material_sha256": "98BA246240D3EFE6989657DB297EF03B8CBCE052F895D8DCB8A505AE67B33900",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 443,
+          "event_frame73414": 762,
+          "fidelity_status": "exact",
+          "role": "masked two-sided cloth surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 619,
+          "event_frame73414": 938,
+          "fidelity_status": "exact",
+          "role": "cloth inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_MC_premake10_D",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Cloth_D",
+        "T_R2T1XigelikaMd10011Cloth_FTM",
+        "T_R2T1XigelikaMd10011Cloth_FX",
+        "T_R2T1XigelikaMd10011Cloth_N",
+        "T_R2T1XigelikaMd10011Cloth_RGID",
+        "T_R2T1XigelikaMd10011_FX"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [
+        {
+          "hex_display": "D7DCFF",
+          "linear_rgba": [
+            0.675,
+            0.71625,
+            1.5,
+            1.0
+          ],
+          "name": "Damage_Skin_ColorTint"
+        }
+      ],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 180,
+        "shading_model": "MSM_ToonCommon",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "0_RampID": 2.0,
+        "0_RampInt": 0.1,
+        "1_RampID": 2.0,
+        "1_RampInt": 0.2,
+        "2_RampID": 2.0,
+        "2_RampInt": 0.2,
+        "3_RampID": 2.0,
+        "3_RampInt": 0.2,
+        "4_RampID": 2.0,
+        "4_RampInt": 0.2,
+        "DamageIntensity": 0.0,
+        "MetalSpecularPower": 3.0,
+        "RampInt": 0.45,
+        "ShadowProcess": 0.55,
+        "ShadowWidth": 0.1,
+        "SpecularPower": 12.0,
+        "XingHenControl": 0.0
+      },
+      "configured_switches_false": [
+        "DebugID"
+      ],
+      "configured_switches_true": [
+        "UseBlendParameter",
+        "UseHueShift",
+        "UseLightOffset_Pitch",
+        "UseMainTexA",
+        "UseMatCap",
+        "UseNormalMap",
+        "UseNormalTex",
+        "UsePBR",
+        "UseRampColor",
+        "UseRampIDMask",
+        "UseRegionID",
+        "UseRotate180UV",
+        "UseSecond",
+        "UseSphereGradient",
+        "UseToonMask",
+        "UseTypeMask",
+        "UseUVGradient"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonCommon",
+      "material_file": "MI_R2T1XigelikaMd10011Down.json",
+      "material_role": "Down",
+      "material_sha256": "F36766BBAECC11AD471B895EA1BC08AA7C62BE0C35F92C382BE9B5217AE99ADE",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 421,
+          "event_frame73414": 740,
+          "fidelity_status": "exact",
+          "role": "lower-body surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 608,
+          "event_frame73414": 927,
+          "fidelity_status": "exact",
+          "role": "lower-body inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_3XingStar_D",
+        "T_MC_premake07_D",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Down_D",
+        "T_R2T1XigelikaMd10011Down_FTM",
+        "T_R2T1XigelikaMd10011Down_N",
+        "T_R2T1XigelikaMd10011Down_RGID"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [
+        {
+          "hex_display": "0CFFFFFF",
+          "linear_rgba": [
+            2.853229,
+            1.296875,
+            3.0,
+            0.05
+          ],
+          "name": "HeightLight_Color"
+        }
+      ],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": true,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 180,
+        "shading_model": "MSM_ToonFace",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "HeightLight_PositionX": 0.604762,
+        "HeightLight_PositionY": 0.619048,
+        "HeightLight_WidthX": 2.0,
+        "HeightLight_WidthY": 1.480201,
+        "ParallaxHeight": 0.15,
+        "ParallaxScale": 0.8,
+        "RotateAngle": 0.109605,
+        "RotateAngle02": -0.1,
+        "SecondLight_Position02X": 0.25,
+        "SecondLight_Position02Y": 0.4,
+        "SecondLight_PositionX": 0.469285,
+        "SecondLight_PositionY": 0.331429,
+        "SecondLight_Position_02X": -0.040476,
+        "SecondLight_Position_02Y": 0.0,
+        "SecondLight_Width02X": 2.0,
+        "SecondLight_Width02Y": 1.5,
+        "SecondLight_WidthX": 0.815548,
+        "SecondLight_WidthY": 0.920846,
+        "ShadowWidth": 0.03,
+        "ShapePosition01X": 0.797619,
+        "ShapePosition01Y": 0.632048,
+        "Width": 0.22
+      },
+      "configured_switches_false": [],
+      "configured_switches_true": [
+        "UseAlphaBlendMode",
+        "UseEyeSDF",
+        "UseHeightLightShape"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonFace",
+      "material_file": "MI_R2T1XigelikaMd10011Eye.json",
+      "material_role": "Eye",
+      "material_sha256": "176E97C9471592087475A69CC82263AAB93F68D7C278010B03FEDE19162DC2E2",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 463,
+          "event_frame73414": 782,
+          "fidelity_status": "exact",
+          "role": "eye surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 519,
+          "event_frame73414": 838,
+          "fidelity_status": "exact",
+          "role": "eye stencil-region writer",
+          "stage": "BasePass stencil-only"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_EyesSecondHeightLight07_EG",
+        "T_FemaleMFace_SDF",
+        "T_HDMF_EM"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Eye_D"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 180,
+        "shading_model": "MSM_ToonFace",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "RampInt": 0.2,
+        "RampPosition": 0.3,
+        "SDFSmoothness": 0.001,
+        "ShadowWidth": 0.03,
+        "SolidShadowStrength": 1.0
+      },
+      "configured_switches_false": [
+        "LightPitch(False=30,True=45)"
+      ],
+      "configured_switches_true": [
+        "UseFaceRamp",
+        "UseLightOffset_Pitch",
+        "UseRampColor",
+        "UseRampMask",
+        "UseSDFShadow",
+        "UseSkinAllRampColor",
+        "UseSkinMask",
+        "UseToonMask",
+        "UseTypeMask",
+        "UseUVGradient"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonFace",
+      "material_file": "MI_R2T1XigelikaMd10011Face.json",
+      "material_role": "Face",
+      "material_sha256": "956B0D0015D291E465B2C430CC8EB480297F29498F9885FE540E61D6138C3D4A",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 432,
+          "event_frame73414": 751,
+          "fidelity_status": "exact",
+          "role": "face surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 530,
+          "event_frame73414": 849,
+          "fidelity_status": "exact",
+          "role": "face stencil-region writer",
+          "stage": "BasePass stencil-only"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 653,
+          "event_frame73414": 972,
+          "fidelity_status": "exact",
+          "role": "face inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_FemaleMFace_SDF",
+        "T_R2T1CalbrenaMd10011Face_ID",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Face_D"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 195,
+        "shading_model": "MSM_ToonHair",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "0_HairMaskChannel": 0.0,
+        "0_Position": 0.55,
+        "0_Width": 0.15,
+        "1_HairMaskChannel": 1.0,
+        "1_Position": 0.504762,
+        "1_Width": 0.152381,
+        "2_HairMaskChannel": 1.0,
+        "2_Position": 0.46,
+        "2_Width": 0.0,
+        "DamageIntensity": 0.0,
+        "RampInt": 0.5,
+        "ShadowProcess": 0.7,
+        "ShadowWidth": 0.05,
+        "SolidShadowStrength": 0.3,
+        "SpecStrength": 0.1,
+        "ToonRimWidth": 0.05
+      },
+      "configured_switches_false": [
+        "UseAllRampColor",
+        "UseAniSwitchShadow",
+        "UseHueShift",
+        "UseMainTexA",
+        "UseOnlySkinRampColor"
+      ],
+      "configured_switches_true": [
+        "UseHairHighlight",
+        "UseHairVCGradient",
+        "UseNormalTex",
+        "UseRampColor",
+        "UseSphereGradient",
+        "UseToonMask",
+        "UseTypeMask",
+        "UseUVGradient"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonHair",
+      "material_file": "MI_R2T1XigelikaMd10011Hair.json",
+      "material_role": "Hair",
+      "material_sha256": "1F0CB3980378A2E04DF2D18051BBC31A1B3DD50519C0A2619141BBF35B46B04D",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 571,
+          "event_frame73414": 890,
+          "fidelity_status": "exact",
+          "role": "rear/main hair surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 631,
+          "event_frame73414": 950,
+          "fidelity_status": "exact",
+          "role": "hair inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_HairNoise02_M",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Hair_D",
+        "T_R2T1XigelikaMd10011Hair_FTM",
+        "T_R2T1XigelikaMd10011Hair_HM",
+        "T_R2T1XigelikaMd10011Hair_HN",
+        "T_R2T1XigelikaMd10011Hair_HR"
+      ]
+    },
+    {
+      "configuration_proves_current_frame_contribution": false,
+      "configured_hdr_colors": [],
+      "configured_override": {
+        "blend_mode": null,
+        "full_precision": null,
+        "opacity_mask_clip": 0.3333,
+        "render_queue": 180,
+        "shading_model": "MSM_ToonCommon",
+        "two_sided": false
+      },
+      "configured_selected_scalars": {
+        "0_RampID": 0.0,
+        "0_RampInt": 0.1,
+        "1_RampID": 2.0,
+        "1_RampInt": 0.1,
+        "2_RampID": 2.0,
+        "2_RampInt": 0.1,
+        "3_RampID": 2.0,
+        "3_RampInt": 0.1,
+        "4_RampID": 2.0,
+        "4_RampInt": 0.1,
+        "DamageIntensity": 0.0,
+        "MetalSpecularPower": 3.0,
+        "RampInt": 0.011905,
+        "ShadowProcess": 0.55,
+        "ShadowWidth": 0.1,
+        "SpecularPower": 12.0,
+        "XingHenControl": 0.0
+      },
+      "configured_switches_false": [
+        "DebugID"
+      ],
+      "configured_switches_true": [
+        "UseBlendParameter",
+        "UseHueShift",
+        "UseLightOffset_Pitch",
+        "UseMainTexA",
+        "UseMatCap",
+        "UseNormalMap",
+        "UseNormalTex",
+        "UseOnlySkinRampColor",
+        "UsePBR",
+        "UseRampColor",
+        "UseRampIDMask",
+        "UseRegionID",
+        "UseRotate180UV",
+        "UseSphereGradient",
+        "UseToonMask",
+        "UseTypeMask",
+        "UseUVGradient",
+        "UseXingHen"
+      ],
+      "current_frame_contribution_status": "not-established-by-material-configuration",
+      "material_family": "ToonCommon",
+      "material_file": "MI_R2T1XigelikaMd10011Up.json",
+      "material_role": "Up",
+      "material_sha256": "186845A29F9E53A7C7E4032CD57AE80E77179BABFCE9CFF8DB328189E39893F8",
+      "runtime_events": [
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 503,
+          "event_frame73414": 822,
+          "fidelity_status": "exact",
+          "role": "upper-body surface",
+          "stage": "BasePass surface"
+        },
+        {
+          "claim_status": "confirmed",
+          "event_frame72751": 599,
+          "event_frame73414": 918,
+          "fidelity_status": "exact",
+          "role": "upper-body inverted-hull outline",
+          "stage": "BasePass outline shell"
+        }
+      ],
+      "unique_external_texture_objects": [
+        "T_5XingStar_D",
+        "T_MC_premake07_D",
+        "T_R2T1ShouanrenMd10011_Skin"
+      ],
+      "unique_local_texture_objects": [
+        "T_R2T1XigelikaMd10011Up_D",
+        "T_R2T1XigelikaMd10011Up_FTM",
+        "T_R2T1XigelikaMd10011Up_N",
+        "T_R2T1XigelikaMd10011Up_RGID"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "semantic_limit": "Material configuration records enabled switches, parameters and bindings. It does not by itself prove that a configured feature contributed pixels in either captured frame.",
+  "sources": {
+    "event_role_matrix": {
+      "path": "../source-report/data/event-role-matrix.json",
+      "sha256": "8AECDD7F3FA546849575DFA4EFCDF78A84667979FB9A1407C9DF70042C1369F7"
+    },
+    "material_instance_summary": {
+      "path": "../source-report/data/material-instance-summary.json",
+      "sha256": "2C90E69F554536F69FC0B6216CC964F6D9A3FEBA023EB9207BEC5BB608449DE2"
+    }
+  }
+}
