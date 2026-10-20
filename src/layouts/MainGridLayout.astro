@@ -10,6 +10,10 @@ import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
 import {
+	resolveBannerPosition,
+	resolvePostBanner,
+} from "../utils/post-media";
+import {
 	BANNER_HEIGHT,
 	BANNER_HEIGHT_EXTEND,
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
@@ -19,24 +23,35 @@ import Layout from "./Layout.astro";
 interface Props {
 	title?: string;
 	banner?: string;
+	bannerPosition?: string;
 	description?: string;
 	lang?: string;
 	setOGTypeArticle?: boolean;
 	headings?: MarkdownHeading[];
 	accent?: AccentName;
+	pagefindIgnore?: boolean;
 }
 
 const {
 	title,
 	banner,
+	bannerPosition,
 	description,
 	lang,
 	setOGTypeArticle,
 	headings = [],
 	accent = "rose",
+	pagefindIgnore = false,
 } = Astro.props;
+const resolvedBanner = resolvePostBanner({ banner }, siteConfig.banner.src);
+const resolvedBannerPosition = resolveBannerPosition(
+	bannerPosition,
+	siteConfig.banner.position ?? "center",
+);
 const hasBannerCredit =
-	siteConfig.banner.enable && siteConfig.banner.credit.enable;
+	!resolvedBanner.hasCustomBanner &&
+	siteConfig.banner.enable &&
+	siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 
 const mainPanelTop = siteConfig.banner.enable
@@ -44,7 +59,7 @@ const mainPanelTop = siteConfig.banner.enable
 	: "5.5rem";
 ---
 
-<Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
+<Layout title={title} banner={banner} bannerPosition={resolvedBannerPosition} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle} pagefindIgnore={pagefindIgnore}>
 
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
@@ -57,7 +72,7 @@ const mainPanelTop = siteConfig.banner.enable
 <!-- Banner -->
 {siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
     <ImageWrapper id="banner" alt="" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                  src={siteConfig.banner.src} position={siteConfig.banner.position}
+                  src={resolvedBanner.banner} position={resolvedBannerPosition}
     >
     </ImageWrapper>
 </div>}

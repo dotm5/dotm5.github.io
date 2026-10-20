@@ -165,7 +165,10 @@ async function validateCmsConfig() {
 			: null,
 		[
 			"body",
+			"banner",
+			"bannerPosition",
 			"category",
+			"coverPreset",
 			"description",
 			"draft",
 			"image",
@@ -196,6 +199,45 @@ async function validateCmsConfig() {
 		imageField?.options?.media,
 		"article_images",
 		"content.posts.fields.image.options.media",
+	);
+	const coverPresetField = Array.isArray(posts.fields)
+		? posts.fields.find((field) => field.name === "coverPreset")
+		: undefined;
+	requireEqual(
+		coverPresetField?.type,
+		"select",
+		"content.posts.fields.coverPreset.type",
+	);
+	requireStringSet(
+		Array.isArray(coverPresetField?.options?.values)
+			? coverPresetField.options.values.map((value) => value.name)
+			: null,
+		["daily", "default", "none", "notes", "technical"],
+		"content.posts.fields.coverPreset.options.values",
+	);
+	const bannerField = Array.isArray(posts.fields)
+		? posts.fields.find((field) => field.name === "banner")
+		: undefined;
+	requireEqual(bannerField?.type, "image", "content.posts.fields.banner.type");
+	requireEqual(
+		bannerField?.options?.media,
+		"article_images",
+		"content.posts.fields.banner.options.media",
+	);
+	const bannerPositionField = Array.isArray(posts.fields)
+		? posts.fields.find((field) => field.name === "bannerPosition")
+		: undefined;
+	requireEqual(
+		bannerPositionField?.type,
+		"select",
+		"content.posts.fields.bannerPosition.type",
+	);
+	requireStringSet(
+		Array.isArray(bannerPositionField?.options?.values)
+			? bannerPositionField.options.values.map((value) => value.name)
+			: null,
+		["bottom", "center", "top"],
+		"content.posts.fields.bannerPosition.options.values",
 	);
 
 	const siteSettings = requireRecord(

@@ -6,6 +6,8 @@ import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import { getAccentForPost } from "../utils/accent-utils";
 import { getDir } from "../utils/url-utils";
+import { resolvePostMedia } from "../utils/post-media";
+import { siteConfig } from "../config";
 import ImageWrapper from "./misc/ImageWrapper.astro";
 import PostMetadata from "./PostMeta.astro";
 
@@ -32,13 +34,20 @@ const {
 	updated,
 	tags,
 	category,
-	image,
+	image: providedImage,
 	imageAlt,
 	description,
 	style,
 } = Astro.props;
 const className = Astro.props.class;
 
+const image =
+	providedImage ||
+	resolvePostMedia(entry.data, entry.slug, {
+		cover: siteConfig.banner.src,
+		banner: siteConfig.banner.src,
+		bannerPosition: siteConfig.banner.position ?? "center",
+	}).cover;
 const hasCover = image !== undefined && image !== null && image !== "";
 
 const coverWidth = "28%";

@@ -1,5 +1,13 @@
 export const PAGE_SIZE = 8;
 
+// Daily notes are intentionally kept out of the main timeline and exposed
+// through the explicit archive category filter only.
+export const DAILY_CATEGORY = "日常";
+
+export function isDailyCategory(category: string | null | undefined): boolean {
+	return typeof category === "string" && category.trim() === DAILY_CATEGORY;
+}
+
 export const LIGHT_MODE = "light",
 	DARK_MODE = "dark",
 	AUTO_MODE = "auto";

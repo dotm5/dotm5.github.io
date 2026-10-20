@@ -26,6 +26,9 @@ updated: 2026-07-26
 description: "用于列表、RSS 与 SEO 的准确摘要"
 image: "./cover.webp"
 imageAlt: "描述画面内容和信息用途，不写“图片”二字"
+coverPreset: "default"
+banner: ""
+bannerPosition: "center"
 tags:
   - Blender
   - NPR
@@ -51,8 +54,10 @@ lang: "zh_CN"
 - AI
 - Projects
 - Notes
+- 日常（仅在“归档”中通过分类筛选访问，不进入主页时间线）
 
 每篇文章选择一个粗粒度分类。更具体的软件、技术和项目名使用 tags；标签保持稳定写法，避免同义词重复。
+“日常”用于记录日常经历和阶段性总结，优先级较低。日常文章不会进入主页时间线、默认归档列表、RSS 或全局搜索；发布后从侧栏分类列表末尾进入“归档 → 日常”查找。
 
 ## 图片
 
@@ -127,3 +132,11 @@ $$
 - [ ] 外部引用指向可靠来源
 - [ ] 没有账号、Token、私钥、内部地址或个人隐私
 - [ ] `pnpm verify` 通过
+
+## 文章媒体预设
+
+image 是文章自己的封面；没有 image 时，coverPreset 会从 public/uploads/ 中按文件名前缀选择默认封面。
+
+默认封面文件使用 default-cover-01.webp、daily-cover-01.webp 等命名。找不到匹配文件时会回退到全站 banner。多个候选文件会根据文章 slug 稳定选择，不会在每次构建时随机变化。
+
+banner 是文章页顶部横幅，留空时使用全站默认 banner；bannerPosition 可单独控制 top、center 或 bottom。媒体字段通过独立解析层处理，以便未来升级文章卡片、布局组件或 CMS 时保留现有 frontmatter。

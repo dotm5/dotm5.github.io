@@ -1,5 +1,5 @@
 ---
-title: "西格莉卡角色渲染拆解"
+title: "239 个 Draw 里，谁在画她的脸"
 published: 2026-07-31
 updated: 2026-07-31
 description: "从两帧 D3D12 RenderDoc 捕获出发，拆解西格莉卡角色材质如何通过 GBuffer、Stencil、Shading ID、Kuro Toon、SSR 与 Reflection 组成可验证的渲染协议。"
@@ -51,7 +51,7 @@ lang: "zh_CN"
 
 ## 1. 从 239 个 action 中确认谁在画
 
-RenderDoc 里一个 draw 出现在角色附近，不等于它就属于角色。事件名可能为空，调试标签可能由引擎批量生成，JSON 里的 `role` 和 `intent` 也是解释字段。可靠的身份需要闭合到模型 section：
+RenderDoc 里一个 draw 出现在角色附近，只说明它在空间上邻近角色。事件名可能为空，调试标签可能由引擎批量生成，JSON 里的 `role` 和 `intent` 也是解释字段。可靠的身份需要闭合到模型 section：
 
 ```text
 UModel section
@@ -129,9 +129,9 @@ Bangs 排在索引缓冲开头，`firstIndex=0`；541、560、582 三次都用�
 
 ![F2-1 三个材质族的原始输入](./images/F2-1-material-family-textures.webp)
 
-**图 F2-1（RAW）**。来源：`../fig/raw/source/textures/` 中的 Down_D、Down_RGID、Bangs_HM、Bangs_HN、Face_D、Eye_D；处理：逐字节副本与共享显示缩放，不做语义着色；支持的主张：三个材质族获得不同形态的局部输入；不支持或尚未证明：材质实例配置某输入、运行时声明某输入、该输入对当前像素产生可见贡献，是三个不同命题，图中不能把它们合并。
+**图 F2-1（RAW）**。来源：`../fig/raw/source/textures/` 中的 Down_D、Down_RGID、Bangs_HM、Bangs_HN、Face_D、Eye_D；处理：逐字节副本与共享显示缩放，不做语义着色；支持的主张：三个材质族获得不同形态的局部输入；保留的边界：材质实例配置某输入、运行时声明某输入、该输入对当前像素产生可见贡献，是三个独立命题，本图只覆盖第一个。
 
-BasePass 表面 draw 的共同点：写角色 MRT payload、写入角色相关 Stencil、正常表面的 Shading ID 统一设为 12。payload 包括法线、颜色、材质参数和离散 ID，供后续阶段解释使用，并非终帧里已经完成的肤色、头发高光或环境反射。Kuro Toon 的全屏 resolve 在更后面出现，读取 GBuffer 和其他场景输入，再决定怎样形成 SceneColor。
+BasePass 表面 draw 的共同点：写角色 MRT payload、写入角色相关 Stencil、正常表面的 Shading ID 统一设为 12。payload 包括法线、颜色、材质参数和离散 ID，供后续阶段解释使用；肤色、头发高光与环境反射在后续全屏阶段写回。Kuro Toon 的全屏 resolve 在更后面出现，读取 GBuffer 和其他场景输入，再决定怎样形成 SceneColor。
 
 这套架构把局部数据生产和全局光照解释彻底分开了。Up、Down、Cloth 共享 ToonCommon 的写入合同，靠 RGID 和参数组保留局部美术控制；Hair、Bangs 共享 HM/HN/HR 型输入，Bangs 额外多出脸域交互；Face、Eye 针对表情、阈值、视差和高光构图组织参数，但仍把像素送进统一角色路由。
 
@@ -145,7 +145,7 @@ BasePass 表面 draw 的共同点：写角色 MRT payload、写入角色相关 S
 
 ![F2-2 Face/Eye 本地与运行时解码差分](./images/F2-2-face-eye-runtime-local-diff.webp)
 
-**图 F2-2（DERIVED）**。来源：本地 Face_D/Eye_D 与 EID 432 `ResourceId::1448252`、EID 463 `ResourceId::1448511` 的 runtime preview；处理：相同尺寸、精确对齐、UNORM 字节绝对差，差分共享非零值的 p99.5 显示上限；支持的主张：两组是 near-identical decoded，而非解码后零误差；不支持或尚未证明：比较没有证明磁盘文件、GPU 压缩块或原始容器字节一致。
+**图 F2-2（DERIVED）**。来源：本地 Face_D/Eye_D 与 EID 432 `ResourceId::1448252`、EID 463 `ResourceId::1448511` 的 runtime preview；处理：相同尺寸、精确对齐、UNORM 字节绝对差，差分共享非零值的 p99.5 显示上限；支持的主张：两组是 near-identical decoded，而非解码后零误差；保留的边界：比较没有证明磁盘文件、GPU 压缩块或原始容器字节一致。
 
 第一层协议的可复现表述：七个 section 由三个 shader 家族写入不同局部 payload，但所有正常表面都携带角色路由所需的状态和 ID 12。接下来回答 Face、Eye 和 Bangs 为什么需要在共同合同上再加两位 Stencil 语义。
 
@@ -167,7 +167,7 @@ BasePass 表面 draw 的共同点：写角色 MRT payload、写入角色相关 S
 
 ![F3-1 指定事件后的 Stencil 序列](./images/F3-1-stencil-sequence.webp)
 
-**图 F3-1（RAW/DERIVED DISPLAY）**。来源：EID 503、519、530、541、560、582 后同一 D32S8 资源的 Stencil aspect；处理：固定裁剪、离散值映射和 nearest-neighbor 缩放，未根据画面手绘 mask；支持的主张：捕获帧内确实出现 2、6、128，Face/Eye writer 引入 6，而 541 不改变 Stencil；不支持或尚未证明：值 128 的业务意义，以及只凭颜色外形给任何值命名。
+**图 F3-1（RAW/DERIVED DISPLAY）**。来源：EID 503、519、530、541、560、582 后同一 D32S8 资源的 Stencil aspect；处理：固定裁剪、离散值映射和 nearest-neighbor 缩放，未根据画面手绘 mask；支持的主张：捕获帧内确实出现 2、6、128，Face/Eye writer 引入 6，而 541 不改变 Stencil；保留的边界：值 128 的业务意义，以及只凭颜色外形给任何值命名。
 
 正文始终说 canonical 2/6，而非 Reference 会把整个字节强制写成 2 或 6，原因是 D3D 的 Replace 受 write mask 约束：
 
@@ -222,9 +222,9 @@ canonical 2 和 6 都能通过，3 和 7 也是。这一事实直接排除了 co
 
 ![F3-2 EID 541 前后 RT1.B 差分](./images/F3-2-eid541-rt1b-diff.webp)
 
-**图 F3-2（DERIVED FROM RAW）**。来源：同一 `ResourceId::1430951`，EID 530 与 541 后的 RT1.B；处理：完全对齐的固定裁剪、UNORM 线性绝对差、非零差分 p99.5 共享上限与二值变化图；支持的主张：541 在完整 Bangs 投影覆盖的可见像素上把 RT1.B 改成近似 0.498 的常量，且只改变 B；不支持或尚未证明：该通道最终被哪个 shader 怎样消费，或是否应命名为刘海阴影。Claim：`C-STENCIL-541-RT1B-FACT` 与 `C-STENCIL-541-SEMANTIC`。
+**图 F3-2（DERIVED FROM RAW）**。来源：同一 `ResourceId::1430951`，EID 530 与 541 后的 RT1.B；处理：完全对齐的固定裁剪、UNORM 线性绝对差、非零差分 p99.5 共享上限与二值变化图；支持的主张：541 在完整 Bangs 投影覆盖的可见像素上把 RT1.B 改成近似 0.498 的常量，且只改变 B；保留的边界：该通道最终被哪个 shader 怎样消费，或是否应命名为刘海阴影。Claim：`C-STENCIL-541-RT1B-FACT` 与 `C-STENCIL-541-SEMANTIC`。
 
-固定管线确认写了什么通道、在什么几何和深度条件下写；像素差分确认实际覆盖了哪里、数值怎样变化。但二者加起来仍不足以确认下游把它当成什么。后续 shader 若把 RT1.B 当遮蔽权重，可能影响脸部；若当通用角色控制位，也可能用于其他合成。最小闭环实验是追踪 RT1.B 的第一个读者，在固定帧中把该通道钳制为原值、0、1 三档，观察哪个输出阶段先变化。该实验尚未执行，标为 P0。
+固定管线确认写了什么通道、在什么几何和深度条件下写；像素差分确认实际覆盖了哪里、数值怎样变化。下游如何使用该通道，由第一个 consumer 的读取证据回答。后续 shader 若把 RT1.B 当遮蔽权重，可能影响脸部；若当通用角色控制位，也可能用于其他合成。最小闭环实验是追踪 RT1.B 的第一个读者，在固定帧中把该通道钳制为原值、0、1 三档，观察哪个输出阶段先变化。该实验尚未执行，标为 P0。
 
 ### 3.3 560 与 582：canonical 分区成立，全 8 位空间却有重叠
 
@@ -235,7 +235,7 @@ EID 560: (S & 0x1E) != 0x06
 EID 582: (S & 0x04) == 0x04
 ```
 
-注意它们的 compare mask 不一样，所以不能看到 Equal/NotEqual 就说是全局补集。脚本枚举 `S=0..255`，结果挺有意思：
+注意它们的 compare mask 不一样，所以不能看到 Equal/NotEqual 就说是全局补集。脚本枚举 `S=0..255`，结果如下：
 
 - 541 通过 32 个值；
 - 560 通过 240 个值；
@@ -245,7 +245,7 @@ EID 582: (S & 0x04) == 0x04
 
 ![F3-D1 0–255 Stencil 状态空间](./images/F3-D1-stencil-fullspace-overlap.webp)
 
-**图 F3-D1（DERIVED NUMERIC）**。来源：`../../source-report/data/basepass-pipeline-state.json` 中 541/560/582 的 compare function、reference 与 mask；处理：枚举 256 个字节并按 560-only、582-only、overlap、neither 离散着色；支持的主张：完整空间存在 112 个双命中状态，二者并集为 256；不支持或尚未证明：这是 PSO 状态空间，不是捕获画面中的像素覆盖。Claim：`C-STENCIL-560-582`。
+**图 F3-D1（DERIVED NUMERIC）**。来源：`../../source-report/data/basepass-pipeline-state.json` 中 541/560/582 的 compare function、reference 与 mask；处理：枚举 256 个字节并按 560-only、582-only、overlap、neither 离散着色；支持的主张：完整空间存在 112 个双命中状态，二者并集为 256；保留的边界：这是 PSO 状态空间，不是捕获画面中的像素覆盖。Claim：`C-STENCIL-560-582`。
 
 看图时需区分协议允许的字母和所有理论字节。引擎前面的 writer 把角色像素约束到少量 canonical 状态；在这些状态中，分区清晰：
 
@@ -258,25 +258,25 @@ EID 582: (S & 0x04) == 0x04
 
 ![F3-D2 canonical 状态真值矩阵](./images/F3-D2-stencil-canonical-truth.webp)
 
-**图 F3-D2（DERIVED NUMERIC）**。来源：同一 PSO 数值与 [`stencil-truth-table-256.csv`](/research/wuwa-xigelika-rendering-protocol/stencil-truth-table-256.csv)；处理：从完整枚举中只取 2、3、6、7，展示 pass/fail；支持的主张：在协议常用状态上，560 与 582 形成 normal-role / face-eye-role 的有效分区，541 对四者都通过；不支持或尚未证明：四个 canonical 值不能替代完整字节空间，也不能证明帧内只出现这四个值。
+**图 F3-D2（DERIVED NUMERIC）**。来源：同一 PSO 数值与 [`stencil-truth-table-256.csv`](/research/wuwa-xigelika-rendering-protocol/stencil-truth-table-256.csv)；处理：从完整枚举中只取 2、3、6、7，展示 pass/fail；支持的主张：在协议常用状态上，560 与 582 形成 normal-role / face-eye-role 的有效分区，541 对四者都通过；保留的边界：四个 canonical 值描述协议常用状态；完整字节空间以枚举表为准，帧内实际出现的值由 Stencil 统计回答。
 
 状态机可通过 writer 约束输入字母，让两个本来有交叠的谓词在可达子集上表现为选择分支；但若将来另一个 pass 保留或设置了 `0x08/0x10`，同一套谓词组合可能进入双命中区。开发者用少量 bit 换来了跨材质路由，同时引入了一个维护约束：新增 Stencil 用途时必须检查已有的 compare mask，不能只检查 Reference。
 
 ### 3.4 两个 Bangs 分支的验证
 
-PSO 真值表只能说明哪些 Stencil 值会通过，不能把逻辑集合贴到角色上冒充真实 coverage。有了离线导出的相邻 attachment，就可以计算事件区间之后哪些 MRT 像素值确实发生了变化。EID 560 用 541 作前基线；EID 582 必须用 571 作前基线——Hair draw 夹在 560 和 582 之间，直接用 560 会把 Hair 对 MRT 的贡献错误归到后面那个 Bangs 分支。
+PSO 真值表描述哪些 Stencil 值会通过；真实 coverage 由像素差分给出。有了离线导出的相邻 attachment，就可以计算事件区间之后哪些 MRT 像素值确实发生了变化。EID 560 用 541 作前基线；EID 582 必须用 571 作前基线——Hair draw 夹在 560 和 582 之间，直接用 560 会把 Hair 对 MRT 的贡献错误归到后面那个 Bangs 分支。
 
 计算对每个可读 MRT 做逐字节绝对差，再把任一通道发生变化的像素取并集。560 区间有 64,095 个变化像素，形成完整可见刘海/头发前部轮廓；582 区间在六个可读 attachment 上仅 319 个变化像素，集中在很小的脸域交界。EID 582 的 RT3 离线导出返回了 0 字节，脚本明确将其排除，未用其他通道复制或猜测填补。
 
 ![F3-3 EID 560/582 的可观测输出变化覆盖](./images/F3-3-bangs-output-coverage.webp)
 
-**图 F3-3（DERIVED FROM RAW，SOURCE-LIMITED）**。来源：EID 541→560 与 571→582 的同尺寸 MRT 快照；处理：精确对齐、逐字节差分、跨可读 attachment 求并集、nearest-neighbor 二值显示，橙/蓝/粉分别表示 560-only、582-only、overlap；支持的主张：两个分支在实际 GBuffer 值变化上呈现大范围与小范围的不同覆盖；不支持或尚未证明：写回相同字节的 fragment 会被漏掉，EID 582 RT3 未纳入，因此这不是完整 fragment invocation mask。
+**图 F3-3（DERIVED FROM RAW，SOURCE-LIMITED）**。来源：EID 541→560 与 571→582 的同尺寸 MRT 快照；处理：精确对齐、逐字节差分、跨可读 attachment 求并集、nearest-neighbor 二值显示，橙/蓝/粉分别表示 560-only、582-only、overlap；支持的主张：两个分支在实际 GBuffer 值变化上呈现大范围与小范围的不同覆盖；保留的边界：写回相同字节的 fragment 会被漏掉，EID 582 RT3 未纳入，因此这不是完整 fragment invocation mask。
 
 把变化强度按同一 p99.5 上限显示，还能看到 560 覆盖更大且在多个 attachment 上都有明显变化，582 在可读通道上的增量非常局部。这符合同一 Bangs 几何按脸域状态选择不同 PS 的机制，但两个 PS 的具体公式差异仍需 DXIL 数据流或受控纹理/参数实验确定。
 
 ![F3-4 两个 Bangs 分支的 attachment 变化累积](./images/F3-4-bangs-output-build-up.webp)
 
-**图 F3-4（DERIVED FROM RAW，SOURCE-LIMITED）**。来源：同 F3-3；处理：七/六个可读 MRT 的最大绝对变化、共享显示上限与最终离散并集；支持的主张：EID 560 与 EID 582 不是相同输出的机械重复，二者在真实 attachment 上留下不同空间变化；不支持或尚未证明：聚合强度不提供每个 GBuffer 通道的业务语义，也不补回缺失的 EID 582 RT3。
+**图 F3-4（DERIVED FROM RAW，SOURCE-LIMITED）**。来源：同 F3-3；处理：七/六个可读 MRT 的最大绝对变化、共享显示上限与最终离散并集；支持的主张：EID 560 与 EID 582 不是相同输出的机械重复，二者在真实 attachment 上留下不同空间变化；保留的边界：聚合强度不提供每个 GBuffer 通道的业务语义，也不补回缺失的 EID 582 RT3。
 
 至此可逐一排除三个常见误解。
 
@@ -328,15 +328,15 @@ Depth 写入引入了一个容易忽略的耦合。560 通过后更新深度和 
 
 F3-3、F3-4 使用 attachment 差分。某个像素只有事件前后至少一个已导出字节不同时才进入变化集合。这一定义可复算、可审计，但存在三个盲区。
 
-第一，shader 可能执行但写回的值与原来相同，此时差分为零，变化集合是可观测下界，并非 fragment invocation 的完整集合。第二，EID 582 的 RT3 导出为零字节，现有计算只汇总了六个可读 attachment；若 582 的主要差异落在缺失通道，319 个像素会严重低估其实际覆盖。第三，跨 attachment 的最大差分仅回答哪里有变化，不会自动给每个通道赋予 base color、normal、roughness 或自定义 payload 等业务含义。
+第一，shader 可能执行但写回的值与原来相同，此时差分为零，变化集合是可观测下界，fragment invocation 的完整集合由 coverage 统计回答。第二，EID 582 的 RT3 导出为零字节，现有计算只汇总了六个可读 attachment；若 582 的主要差异落在缺失通道，319 个像素会严重低估其实际覆盖。第三，跨 attachment 的最大差分仅回答哪里有变化，不会自动给每个通道赋予 base color、normal、roughness 或自定义 payload 等业务含义。
 
 Stencil 导出同样有不同边界。F3-1 是每个保存节点后的实际 Stencil 字节，能证明字母表和状态转移；F3-D1/D2 是固定管线 predicate 对 `0..255` 的确定性求值，能证明逻辑集合。前者未直接给出某个 draw 的 tested-pixel mask，后者未给出帧内每个屏幕位置持有的值。两类证据按坐标结合才能得到捕获级测试覆盖。
 
-F3-2 对 RT1.B 的结论停在写入事实。变化后字节 127 对应 UNORM 约 0.498，可能是一个居中控制值，也可能只是量化后的编码常量。在拿到第一个 consumer 的读取、解码和扰动结果之前，不能把 0.498 直接解释为一半阴影、零中心偏移或布尔标记。数值可见不等于语义已知。保留这个边界，后续实验才具有判别力——不同候选语义对 0/0.498/1 的响应应该不同。
+F3-2 对 RT1.B 的结论停在写入事实。变化后字节 127 对应 UNORM 约 0.498，可能是一个居中控制值，也可能只是量化后的编码常量。0.498 的业务解释要等第一个 consumer 的读取、解码和扰动结果；在此之前它只是一个数值。数值可见与语义已知分开记录。保留这个边界，后续实验才具有判别力——不同候选语义对 0/0.498/1 的响应应该不同。
 
 本章对四类图使用四种不同的动词：
 
-| 证据 | 可以说 | 不能替代 |
+| 证据 | 可以支持 | 仍需其他证据 |
 |---|---|---|
 | PSO predicate 枚举 | 某个 Stencil 值通过/失败 | 捕获画面上的 coverage |
 | Stencil aspect 快照 | 某节点后像素持有值 2/6/128 | 某 draw 实际执行次数 |
@@ -370,17 +370,17 @@ region = value & 0x0F
 high_nibble = value >> 4
 ```
 
-三张图的 `region` 都严格只出现 0、1、2、3、4。这是对 4,194,304 个字节逐一计算的结果，非凭文件名或颜色猜测。材质实例中存在 `0_...` 到 `4_...` 五组编号化参数，低四位作五区域选择器是目前最强解释。仍标为 inferred，原因是未在 Kuro Toon 内部定位到最终的索引语句——统计结构与参数结构对齐，尚不等于源码变量名已知。
+三张图的 `region` 都严格只出现 0、1、2、3、4。这是对 4,194,304 个字节逐一计算的结果，与文件名或颜色猜测无关。材质实例中存在 `0_...` 到 `4_...` 五组编号化参数，低四位作五区域选择器是目前最强解释。仍标为 inferred，原因是未在 Kuro Toon 内部定位到最终的索引语句——统计结构与参数结构对齐，源码变量名仍待指令级证据。
 
 ![F4-1 Down RGID 的低/高 nibble 解码](./images/F4-1-rgid-nibble-decode.webp)
 
-**图 F4-1（DERIVED）**。来源：`../fig/raw/source/textures/T_R2T1XigelikaMd10011Down_RGID.png`；处理：原始字节、`value & 0x0F`、`value >> 4` 与低位离散着色，所有 mask 使用 nearest-neighbor；支持的主张：低四位形成清晰的 0–4 分区，高四位也携带非零结构；不支持或尚未证明：图没有给高位赋予任何开关名称，也没有证明低位在最终 resolve 中的具体采样代码。Claim：`C-RGID-LOW-NIBBLE`、`C-RGID-HIGH-NIBBLE`。
+**图 F4-1（DERIVED）**。来源：`../fig/raw/source/textures/T_R2T1XigelikaMd10011Down_RGID.png`；处理：原始字节、`value & 0x0F`、`value >> 4` 与低位离散着色，所有 mask 使用 nearest-neighbor；支持的主张：低四位形成清晰的 0–4 分区，高四位也携带非零结构；保留的边界：图没有给高位赋予任何开关名称，也没有证明低位在最终 resolve 中的具体采样代码。Claim：`C-RGID-LOW-NIBBLE`、`C-RGID-HIGH-NIBBLE`。
 
 三件服装并排后，低位区域的共同语法更明显。编号沿 UV 岛和装饰结构交错出现，而非按整张贴图从左到右分块：主体面料、边缘、装饰带、金属或高亮局部可以在一个 section 内被重新分组。对美术生产而言，这比新增材质槽更轻：网格拓扑保持不变，换色或局部响应靠一张低成本索引纹理和五组参数完成。
 
 ![F4-2 Cloth/Down/Up 的低四位区域](./images/F4-2-rgid-three-materials.webp)
 
-**图 F4-2（DERIVED）**。来源：Cloth_RGID、Down_RGID、Up_RGID 的原始字节；处理：同一低四位公式、同一离散 palette、nearest-neighbor；支持的主张：三个 ToonCommon 实例共享 0–4 区域字母表，区域空间形状则由各自 UV 与资产决定；不支持或尚未证明：相同编号不意味着三个实例的颜色、Ramp、PBR 或发光参数数值相同。
+**图 F4-2（DERIVED）**。来源：Cloth_RGID、Down_RGID、Up_RGID 的原始字节；处理：同一低四位公式、同一离散 palette、nearest-neighbor；支持的主张：三个 ToonCommon 实例共享 0–4 区域字母表，区域空间形状则由各自 UV 与资产决定；保留的边界：相同编号不意味着三个实例的颜色、Ramp、PBR 或发光参数数值相同。
 
 区域编号不同于材质类型。编号 2 在 Down 上可能对应一块装饰，在 Cloth 上可能位于另一种织物岛；运行时实际取到的属性来自当前 MI 的第 2 组参数。低四位更像局部数组索引，非全角色统一的语义枚举。Blender 迁移时应保留数值索引和每个实例自己的参数表，勿将 0–4 硬编码为皮肤、金属、布料等跨资产名称。
 
@@ -400,9 +400,9 @@ high_nibble = value >> 4
 
 ![F4-3 RGID 高四位非零位置](./images/F4-3-rgid-high-nibble.webp)
 
-**图 F4-3（DERIVED）**。来源：三张原始 RGID；处理：`(value >> 4) != 0` 二值化与 Down 原图叠加，mask 采用 nearest-neighbor；支持的主张：高四位非零区域稀疏但空间上有组织，比例可由脚本复算；不支持或尚未证明：任何具体材质开关、Ramp 分支或轮廓语义。Claim：`C-RGID-HIGH-NIBBLE`。
+**图 F4-3（DERIVED）**。来源：三张原始 RGID；处理：`(value >> 4) != 0` 二值化与 Down 原图叠加，mask 采用 nearest-neighbor；支持的主张：高四位非零区域稀疏但空间上有组织，比例可由脚本复算；保留的边界：任何具体材质开关、Ramp 分支或轮廓语义。Claim：`C-RGID-HIGH-NIBBLE`。
 
-最小实验是建立高位值分层 A/B，而不是看图猜名称。固定相机、灯光与曝光，把高四位分别清零、保持原值、替换为单一值，低四位不变；在 BasePass GBuffer、Kuro Toon 输出和最终 SceneColor 三个阶段找第一个发生变化的资源。若变化在 BasePass 出现，高位可能参与局部 payload 写入；若 BasePass 不变而 Kuro resolve 变化，它更可能是下游解释字段；若全链无差别，还需检查当前变体是否消费它。
+最小实验是建立高位值分层 A/B，名称留给实验结果。固定相机、灯光与曝光，把高四位分别清零、保持原值、替换为单一值，低四位不变；在 BasePass GBuffer、Kuro Toon 输出和最终 SceneColor 三个阶段找第一个发生变化的资源。若变化在 BasePass 出现，高位可能参与局部 payload 写入；若 BasePass 不变而 Kuro resolve 变化，它更可能是下游解释字段；若全链无差别，还需检查当前变体是否消费它。
 
 未知项落到操纵哪个变量、观察哪个最早输出、怎样算通过，而非在文章结尾列一堆名词。高位现保留为 unknown upper field。
 
@@ -420,13 +420,13 @@ z = sqrt(max(1 - x*x - y*y, 0))
 
 ![F4-4 从 Down_N.RG 重建 Z](./images/F4-4-normal-xy-reconstruction.webp)
 
-**图 F4-4（DERIVED）**。来源：`Down_N.png` 的 R/G；处理：UNORM→signed XY、单位半球 Z 重建与 RGB 显示，统一固定范围；支持的主张：R/G 形成可复算的法线 XY，重建后得到连续的单位半球可视化；不支持或尚未证明：这不是 shader 反编译结果，B/A 的业务用途仍未知，切线基与最终世界空间变换也未在图中恢复。Claim：`C-NORMAL-XY`。
+**图 F4-4（DERIVED）**。来源：`Down_N.png` 的 R/G；处理：UNORM→signed XY、单位半球 Z 重建与 RGB 显示，统一固定范围；支持的主张：R/G 形成可复算的法线 XY，重建后得到连续的单位半球可视化；保留的边界：这不是 shader 反编译结果，B/A 的业务用途仍未知，切线基与最终世界空间变换也未在图中恢复。Claim：`C-NORMAL-XY`。
 
 专门展示错误地使用 B 这个候选，是因为离线 PNG 有四个通道，最自然的迁移错误就是把 RGB 直接连到 Normal。但 B 最大只有 4，映射到 signed 范围后几乎恒为 -1；再归一化会把大量法线压到错误半球。这个错误在静态材质球上可能只是光有点奇怪，容易被调灯光掩盖，但实际是系统性崩溃。
 
 ![F4-5 XY 重建与把 B 当 Z 的误差](./images/F4-5-normal-z-error.webp)
 
-**图 F4-5（DERIVED COUNTEREXAMPLE）**。来源：同一 Down_N；处理：A 使用 R/G 重建 Z，B 把存储 B 映射为 Z 后归一化，C 为逐通道绝对差，D 为误差大于 `1/255` 的离散 mask；支持的主张：两种解释产生系统性而非局部误差，因此 Blender 迁移不能直接把 RGB 当完整法线；不支持或尚未证明：A 是证据支持的迁移假说，不是对原 shader 高级源码的逐句复原。
+**图 F4-5（DERIVED COUNTEREXAMPLE）**。来源：同一 Down_N；处理：A 使用 R/G 重建 Z，B 把存储 B 映射为 Z 后归一化，C 为逐通道绝对差，D 为误差大于 `1/255` 的离散 mask；支持的主张：两种解释产生系统性而非局部误差，因此 Blender 迁移不能直接把 RGB 当完整法线；保留的边界：A 是证据支持的迁移假说，不是对原 shader 高级源码的逐句复原。
 
 法线打包的开发收益：R/G 可用适合二维法线的压缩方案，B/A 留给其他低频控制或打包字段，下游统一重建 Z。成本是离线工具必须知道通道合同，边界像素需要安全钳制。若工具按普通 RGB 法线导入，结果可能看起来还能用，但后面所有 Ramp、specular 和 outline 调参都建立在错误基线上。
 
@@ -442,7 +442,7 @@ Shading ID 12 只说明这是正常角色表面，不能独自决定每个区域
 
 ## 5. ToonHair：HM/HN/HR 的行为模型
 
-头发大概是最容易看图编公式的地方。终帧里能看到稳定的高光带，MI 里又有 channel、position、width 这类参数，容易让人写出一段看起来合理的乘法和 Ramp 采样。但没有 shader debug 或 DXIL 数据流闭环，精确公式仍然未知。这一章仅建立由尺寸、通道变化、绑定身份和参数分组共同支持的行为模型。
+头发是最容易看图编公式的地方。终帧里能看到稳定的高光带，MI 里又有 channel、position、width 这类参数，很容易让人写出一段看起来合理的乘法和 Ramp 采样。但没有 shader debug 或 DXIL 数据流闭环，精确公式仍然未知。这一章仅建立由尺寸、通道变化、绑定身份和参数分组共同支持的行为模型。
 
 确认层包括四件事：
 
@@ -451,15 +451,15 @@ Shading ID 12 只说明这是正常角色表面，不能独自决定每个区域
 3. Hair_HR 是 512×4 的极窄查表；
 4. Hair 与 Bangs 的 MI 都有三组 channel/position/width 型参数。
 
-这些事实说明数据被分成“高分辨率局部权重”“较低分辨率方向/坐标输入”“极低高度颜色或强度查表”三个尺度。它们非常适合构建可控的卡通头发响应，却不足以确认采样顺序和组合算子。
+这些事实说明数据被分成“高分辨率局部权重”“较低分辨率方向/坐标输入”“极低高度颜色或强度查表”三个尺度。它们非常适合构建可控的卡通头发响应；采样顺序和组合算子由 shader 指令确认。
 
 ### 5.1 HM：高分辨率局部权重
 
-HM 的 R/G/B 并非同一张灰度图的复制。Hair 和 Bangs 各通道的空间图案不同：某些发束集中在 R，另一些结构在 G/B，Alpha 基本恒定。这支持多通道 mask 或权重集合的解释，但不支持将任一通道直接命名为主高光、次高光或遮蔽。
+HM 的 R/G/B 承载不同结构，三通道来自不同的空间图案。Hair 和 Bangs 各通道的空间图案不同：某些发束集中在 R，另一些结构在 G/B，Alpha 基本恒定。这支持多通道 mask 或权重集合的解释；把某一通道命名为主高光、次高光或遮蔽需要消费者证据。
 
 ![F5-1 Hair/Bangs HM 通道](./images/F5-1-hair-bangs-hm-channels.webp)
 
-**图 F5-1（RAW CHANNELS）**。来源：Hair_HM 与 Bangs_HM 原始 2048×2048 PNG；处理：RGBA 按固定 `[0,255]` 灰度拆分、共享显示范围；支持的主张：HM 是多通道且 Hair/Bangs 空间内容不同，足以提供发束级局部权重；不支持或尚未证明：各通道的 shader 变量名、混合公式和最终高光含义。Claim：`C-HAIR-BEHAVIOR-MODEL`。
+**图 F5-1（RAW CHANNELS）**。来源：Hair_HM 与 Bangs_HM 原始 2048×2048 PNG；处理：RGBA 按固定 `[0,255]` 灰度拆分、共享显示范围；支持的主张：HM 是多通道且 Hair/Bangs 空间内容不同，足以提供发束级局部权重；保留的边界：各通道的 shader 变量名、混合公式和最终高光含义。Claim：`C-HAIR-BEHAVIOR-MODEL`。
 
 HM 使用 2048 分辨率有其设计意图。高光位置随视角变化，但美术希望发束边界、局部弱化和装饰遮挡稳定贴在模型上，高分辨率 mask 可承载这种 UV 空间结构。若所有形状都由屏幕空间法线即时推导，美术很难精确控制某根发束；若把最终高光直接烘进颜色，视角变化又会失真。HM 介于两者之间：提供局部可控权重，让后续方向输入和参数决定动态部分。
 
@@ -469,9 +469,9 @@ HN 的 R/G 变化丰富，B/A 固定 255。将 R/G 映射到 `[-1,1]`，可确�
 
 ![F5-2 Hair/Bangs HN 的 R/G 与二维场](./images/F5-2-hair-bangs-hn-channels.webp)
 
-**图 F5-2（DERIVED）**。来源：Hair_HN、Bangs_HN；处理：R/G 原通道、`x=2R-1`、`y=2G-1`、`atan2(y,x)` 色相和 `length(xy)` 灰度；支持的主张：HN 的有效变化集中于二维输入，Hair/Bangs 的方向结构不同；不支持或尚未证明：角度图是分析可视化，不等于运行时使用的向量空间或采样公式。
+**图 F5-2（DERIVED）**。来源：Hair_HN、Bangs_HN；处理：R/G 原通道、`x=2R-1`、`y=2G-1`、`atan2(y,x)` 色相和 `length(xy)` 灰度；支持的主张：HN 的有效变化集中于二维输入，Hair/Bangs 的方向结构不同；保留的边界：角度图是分析可视化；运行时使用的向量空间与采样公式由 shader 读取确认。
 
-HN 为 512 而 HM 为 2048，合理推断是方向/坐标场比局部权重更平滑，低分辨率已足够；四倍边长差带来的内存和带宽节省显著。另一种可能是 HN 并非方向，而是两路独立标量。R/G 可视化仅证明二维结构，不能排除这种用法。最小实验应分别把 R、G 钳制到 0.5，在相同相机轨迹上比较高光是移动、变宽还是仅强度变化。
+HN 为 512 而 HM 为 2048，合理推断是方向/坐标场比局部权重更平滑，低分辨率已足够；四倍边长差带来的内存和带宽节省显著。另一种可能是 HN 承载两路独立标量。R/G 可视化确认的是二维结构，两种用法都与之相容。最小实验应分别把 R、G 钳制到 0.5，在相同相机轨迹上比较高光是移动、变宽还是仅强度变化。
 
 ### 5.3 HR：四行查表
 
@@ -479,7 +479,7 @@ HN 为 512 而 HM 为 2048，合理推断是方向/坐标场比局部权重更�
 
 ![F5-3 Hair_HR 的四行结构](./images/F5-3-hair-hr-strip.webp)
 
-**图 F5-3（RAW/DERIVED）**。来源：Hair_HR 512×4 原始 PNG；处理：nearest-neighbor 放大、四行分离与逐行 RGB 平均曲线；支持的主张：资源由四条可区分的横向查表组成，横轴可承载连续 lookup；不支持或尚未证明：哪一个参数选择行、横坐标怎样计算、返回值表示颜色还是强度。
+**图 F5-3（RAW/DERIVED）**。来源：Hair_HR 512×4 原始 PNG；处理：nearest-neighbor 放大、四行分离与逐行 RGB 平均曲线；支持的主张：资源由四条可区分的横向查表组成，横轴可承载连续 lookup；保留的边界：哪一个参数选择行、横坐标怎样计算、返回值表示颜色还是强度。
 
 四行设计的收益是把艺术曲线塞进极小纹理：shader 计算一个连续坐标，按某个离散类别选行，即可获得可编辑的色带或强度响应。对比把复杂曲线硬编码进 shader，Ramp 更容易被美术迭代；对比完整二维 LUT，512×4 的缓存和带宽代价极低。风险是采样精度、行间过滤和颜色空间必须严格设置，否则四行会互相污染或在不同工具中产生不一致。
 
@@ -489,9 +489,9 @@ Hair_HN、Bangs_HN、Hair_HR 三项在解码像素层达到了 pixel-exact；Hai
 
 ![F5-4 Hair/Bangs HM 本地与运行时差分](./images/F5-4-hair-bangs-runtime-local-diff.webp)
 
-**图 F5-4（DERIVED）**。来源：本地 Hair_HM/Bangs_HM 与 EID 571 `ResourceId::1197815`、EID 560 `ResourceId::1197795`；处理：同尺寸精确对齐、UNORM 字节绝对差、共享差分显示和变化像素 mask；支持的主张：两组与本地资产高度同源且属于 near-identical decoded；不支持或尚未证明：解码近似不等于 PNG 文件、GPU 压缩块或资源容器 byte-exact。
+**图 F5-4（DERIVED）**。来源：本地 Hair_HM/Bangs_HM 与 EID 571 `ResourceId::1197815`、EID 560 `ResourceId::1197795`；处理：同尺寸精确对齐、UNORM 字节绝对差、共享差分显示和变化像素 mask；支持的主张：两组与本地资产高度同源且属于 near-identical decoded；保留的边界：解码近似描述像素级同源；PNG 文件、GPU 压缩块与资源容器的 byte-exact 由哈希分别核对。
 
-名字相同或纹理相近不足以确认捕获绑定的就是离线解包的那一张；反过来，少量压缩误差也不该被错判为不同资产。3/8/8 分级保留了这种中间状态：零像素误差进 pixel-exact，极高相关加极小误差进 near-identical decoded，其余保持 unresolved。
+名字相同或纹理相近只提供候选；捕获绑定的资源与离线解包文件是否同一张，由像素与容器证据判定，少量压缩误差属于中间状态。3/8/8 分级保留了这种中间状态：零像素误差进 pixel-exact，极高相关加极小误差进 near-identical decoded，其余保持 unresolved。
 
 ### 5.5 安全的行为模型与它的边界
 
@@ -530,7 +530,7 @@ Blender 复刻时，第一阶段仅实现证据支持的输入层：HM 四通道
 
 ### 6.1 为何未合并为一个 outline draw
 
-Up 和 Down 完全共用 outline VS/PS，开发者未给每件衣物准备独立算法。但 Cloth 保留了 discard，Hair 用了另一份 VS，Bangs 和 Face 又各有变体，反壳并非无条件的统一法线膨胀。所有 section 遵守共同的反壳加 ID 13 输出协议，但在顶点扩张、裁切和局部参数读取上允许变体。
+Up 和 Down 完全共用 outline VS/PS，开发者未给每件衣物准备独立算法。但 Cloth 保留了 discard，Hair 用了另一份 VS，Bangs 和 Face 又各有变体，反壳按材质族使用不同策略，法线膨胀只覆盖其中一部分。所有 section 遵守共同的反壳加 ID 13 输出协议，但在顶点扩张、裁切和局部参数读取上允许变体。
 
 这样拆分的好处：第一，轮廓宽度或扩张方向可按部件控制，长发、身体衣片和脸部不必接受同一尺度。第二，Cloth 仍可丢弃不应产生壳层的像素，避免镂空或装饰区域被一圈实线封住。第三，原 section 和骨骼蒙皮关系被保留，轮廓随动画和局部变形移动，不依赖终帧边缘检测去重新猜测对象边界。
 
@@ -580,7 +580,7 @@ Stencil bit `0x02` 充当粗粒度路由标签。没有该位的场景像素交�
 
 ![F7-1 Deferred/Toon 的 Stencil tested domain](./images/F7-1-deferred-toon-stencil-coverage.webp)
 
-**图 F7-1（RAW/DERIVED）**。来源：EID 1377 后保存的 D32S8 Stencil 与 `ResourceId::1430956` HDR 场景上下文；处理：在同一 2560×1440 Stencil byte 上分别计算 `(S&0x02)==0` 与 `(S&0x02)==0x02`，使用固定角色裁剪、nearest-neighbor 离散 mask 和共享 Reinhard→sRGB 上下文显示；支持的主张：`C-LIGHT-1363-1377-ROUTE`，捕获中 standard domain 为 2,956,118 像素、Toon domain 为 730,282 像素，overlap 为 0、union 为 3,686,400；不支持或尚未证明：tested coverage 不表示两套 shader 的亮度、计算量或内部公式，也不证明每个通过像素都产生非零 SceneColor 增量。
+**图 F7-1（RAW/DERIVED）**。来源：EID 1377 后保存的 D32S8 Stencil 与 `ResourceId::1430956` HDR 场景上下文；处理：在同一 2560×1440 Stencil byte 上分别计算 `(S&0x02)==0` 与 `(S&0x02)==0x02`，使用固定角色裁剪、nearest-neighbor 离散 mask 和共享 Reinhard→sRGB 上下文显示；支持的主张：`C-LIGHT-1363-1377-ROUTE`，捕获中 standard domain 为 2,956,118 像素、Toon domain 为 730,282 像素，overlap 为 0、union 为 3,686,400；保留的边界：tested coverage 不表示两套 shader 的亮度、计算量或内部公式，也不证明每个通过像素都产生非零 SceneColor 增量。
 
 图中的两种颜色仅表示集合，非普通像素先变成橙色再被蓝色覆盖。同一角色附近同时有头发、衣物、背景和透明物，终帧颜色边界无法可靠替代 Stencil tested pixels。只有对保存的 byte 逐像素执行已确认的 predicate，才能回答两个 pass 实际被允许处理哪些位置。
 
@@ -590,9 +590,9 @@ EID 1363 和 1377 之间还有 EID 1369、1376，但 action signature 显示它�
 
 ![F7-2 EID 1363→1377 SceneColor 增量](./images/F7-2-kurotoon-scene-color-diff.webp)
 
-**图 F7-2（DERIVED FROM RAW）**。来源：EID 1363 与 1377 后同一 `ResourceId::1430956` 的线性 RGBA EXR；处理：精确配准、固定角色裁剪、共享 Reinhard→sRGB 显示，在线性 float 上计算 absolute diff，并以 epsilon `1e-6` 生成变化像素；支持的主张：`C-LIGHT-1363-1377-ROUTE`，该区间变化像素比例为 `0.19809434678819443`，变化像素数 730,255，与 Toon tested domain 的规模高度一致，最大绝对通道差为 `2.5712890625`；不支持或尚未证明：差分不恢复 `KuroToonShadingPixelShader` 的内部计算，也不能把 ID 12 与 ID 13 的具体输出效果从总增量中分离。
+**图 F7-2（DERIVED FROM RAW）**。来源：EID 1363 与 1377 后同一 `ResourceId::1430956` 的线性 RGBA EXR；处理：精确配准、固定角色裁剪、共享 Reinhard→sRGB 显示，在线性 float 上计算 absolute diff，并以 epsilon `1e-6` 生成变化像素；支持的主张：`C-LIGHT-1363-1377-ROUTE`，该区间变化像素比例为 `0.19809434678819443`，变化像素数 730,255，与 Toon tested domain 的规模高度一致，最大绝对通道差为 `2.5712890625`；保留的边界：差分描述输出变化；`KuroToonShadingPixelShader` 的内部计算由反汇编确认，ID 12 与 ID 13 的具体效果分别由各自的 A/B 给出。
 
-730,255 个变化像素比 730,282 个 tested 像素少了 27 个，这不构成路由矛盾。通过 Stencil 只意味着 shader invocation 有资格作用于像素；输出可能恰好保持原值、被写成数值一样的结果，或者因为 epsilon 阈值没进入变化 mask。反过来说，两个数量接近也不等于逐像素一一对应——仍然应该用保存的 coverage 和 HDR 差分分别去描述。
+730,255 个变化像素比 730,282 个 tested 像素少了 27 个，这不构成路由矛盾。通过 Stencil 只意味着 shader invocation 有资格作用于像素；输出可能恰好保持原值、被写成数值一样的结果，或者因为 epsilon 阈值没进入变化 mask。两个数量接近描述的是规模一致；逐像素对应关系由保存的 coverage 与 HDR 差分分别描述。
 
 F7-2 纠正的是事件级叙事，非替代 shader debug。它确认了 1377 向同一 SceneColor 写入了可见的角色域结果，且这段变化能与 bit `0x02` tested domain 对照；但未给出 ID 12 如何计算普通角色表面、ID 13 如何计算轮廓，也未证明二者仅差一个颜色常量。ID 12/13 更像是角色域内部的第二级解释键，而 Stencil bit `0x02` 是进入角色 resolve 的第一级门。前者的逐像素分支仍是未知项。
 
@@ -634,21 +634,21 @@ EID 1377 结束后，SceneColor 已包含角色 Toon 域的写入，但整帧还
 
 ## 9. 未知项：下一轮实验的输入
 
-到这里，角色渲染的主要协议已能由事件、资源、固定功能状态和确定性像素处理相互印证。但能描述运行流程不等于知道每个通道的业务名称。RGID 高四位、Packed Normal 的 B/A、EID 541 写入的 RT1.B，还有 outline、SSR 和后处理中的若干消费者，仍缺从写入端到读取指令、再到可复算输出变化的完整链。
+到这里，角色渲染的主要协议已能由事件、资源、固定功能状态和确定性像素处理相互印证。运行流程可以描述，每个通道的业务名称仍待指令级证据。RGID 高四位、Packed Normal 的 B/A、EID 541 写入的 RT1.B，还有 outline、SSR 和后处理中的若干消费者，仍缺从写入端到读取指令、再到可复算输出变化的完整链。
 
 这一章把未知项压缩为固定六列实验表，不再画流程图。`P0` 为阻塞主协议解释的项；`P1` 为局部材质族或帧阶段的语义项；`P2` 为建立在前两级结果之上的迁移验证。完整实验记录见[附录](/research/wuwa-xigelika-rendering-protocol/appendix-experiment-roadmap.md)，待导出资源见 [CAPTURE_TODO](/research/wuwa-xigelika-rendering-protocol/capture-todo.md)。
 
 | 问题（优先级） | 当前直接证据 | 当前最强推断 | 替代解释 | 最小实验 / 所需补充 | 通过标准 |
 |---|---|---|---|---|---|
-| RGID high nibble（P1） | Cloth、Down、Up 的高四位非零比例分别为 1.808190%、4.154682%、2.217555%，空间分布稀疏但有组织；具体语义为 `unknown`。 | 它更像独立于低四位区域号的次级 authored field，例如 feature bits 或第二索引。 | 可能只是未被当前 shader 变体消费的打包残留，也可能是 palette bank，而非开关。 | 固定低四位和全部材质参数，只对高四位执行原值、清零、单值扫描；保存最早发生变化的 GBuffer 与最终 SceneColor。若无法从现有资产覆写测试，需要用户补充可重放的 raw capture 或受控材质实验。 | 变化必须在相同像素域可重复，并能定位到具体采样、位测试或下游输出；没有变化只能说明测试范围内未观察到消费，不能证明字段无用。 |
-| Normal 的 N.B / N.A（P1） | N.R/G 的单位圆统计支持 XY 重建；B 最大值仅为 4，B/A 的消费者尚未定位。 | B/A 可能承载低频控制、辅助 mask 或压缩附加量，而不是普通法线 Z。 | B 可能是未使用填充，A 也可能只服务某个未启用变体；R/G 还可能是一般二维方向场。 | 保持 R/G、UV 和所有参数不变，分别把 B、A 设为 0、0.5、1，导出相同 draw 的 MRT、最终光照与 pixel history。缺 shader-debug 输入时需要用户补充 raw capture。 | B 与 A 的影响要分别落到明确 consumer 指令或稳定输出差分；否则继续标为 `unknown`，不能按常见法线贴图惯例命名。 |
+| RGID high nibble（P1） | Cloth、Down、Up 的高四位非零比例分别为 1.808190%、4.154682%、2.217555%，空间分布稀疏但有组织；具体语义为 `unknown`。 | 它更像独立于低四位区域号的次级 authored field，例如 feature bits 或第二索引。 | 可能只是未被当前 shader 变体消费的打包残留，也可能是 palette bank，而非开关。 | 固定低四位和全部材质参数，只对高四位执行原值、清零、单值扫描；保存最早发生变化的 GBuffer 与最终 SceneColor。若无法从现有资产覆写测试，需要用户补充可重放的 raw capture 或受控材质实验。 | 变化必须在相同像素域可重复，并能定位到具体采样、位测试或下游输出；没有变化描述测试范围内未观察到消费；字段是否有用由扩大测试范围后的结果判定。 |
+| Normal 的 N.B / N.A（P1） | N.R/G 的单位圆统计支持 XY 重建；B 最大值仅为 4，B/A 的消费者尚未定位。 | B/A 可能承载低频控制、辅助 mask 或压缩附加量；普通法线 Z 已有 R/G 重建。 | B 可能是未使用填充，A 也可能只服务某个未启用变体；R/G 还可能是一般二维方向场。 | 保持 R/G、UV 和所有参数不变，分别把 B、A 设为 0、0.5、1，导出相同 draw 的 MRT、最终光照与 pixel history。缺 shader-debug 输入时需要用户补充 raw capture。 | B 与 A 的影响要分别落到明确 consumer 指令或稳定输出差分；否则继续标为 `unknown`，名称按实测消费者确定。 |
 | EID 541 的 RT1.B 语义与 consumer（P0） | 完整 Bangs 范围为 29,307 indices；depth test 开、depth write 关、Stencil keep、无声明纹理采样、只写 RT1.B；`0x02` 与 `0x06` canonical 状态都通过。 | 这是由刘海几何生成、供后续角色分支读取的控制量，可能参与头脸交界处的遮挡或衰减。 | 也可能是通用角色 flag、投影控制或与“刘海阴影”无关的中间量。 | 在同一头脸像素上执行 pixel history / shader debug，并在 541 后将 RT1.B 受控覆写为 0 与 1，追踪 560、582、1377。当前缺 consumer trace，需要用户补充 raw capture 调试导出。 | 必须形成“541 写入 → 明确 SRV/寄存器读取 → 具体指令或分支 → 可复算输出变化”的闭环；只有空间相关性不算通过。 |
-| Bangs 两个 PS 的差异（P0） | EID 560 与 582 使用同一 Bangs index range、同一 VS hash、各声明 7 张纹理，但 PS hash 分别为 `3752…DC2E` 与 `2FCB…40EC`，Stencil predicate 也不同。可读 MRT 的输出增量分别为 64,095 与 319 像素，交集为 0；582 的 RT3 未纳入。 | 两者像是同一 ToonHair 家族针对 canonical 外部域与 Face 域的专用 PS 变体。 | 差异可能主要来自常量、绑定或写回同值，而非两套完整美术模型；现有增量还会漏掉同值写入。 | 对 PS DXIL、root signature、SRV/CBV、常量和同一 MRT 做逐项差分，并在边界像素各 debug 一次。要闭合 RT3，需用户补充有效的 EID 582 raw capture 导出。 | 每项差异都要能回指 shader 指令、绑定、Stencil 域或像素指标，且不能把两个域写成同一像素上的串行覆盖。 |
+| Bangs 两个 PS 的差异（P0） | EID 560 与 582 使用同一 Bangs index range、同一 VS hash、各声明 7 张纹理，但 PS hash 分别为 `3752…DC2E` 与 `2FCB…40EC`，Stencil predicate 也不同。可读 MRT 的输出增量分别为 64,095 与 319 像素，交集为 0；582 的 RT3 未纳入。 | 两者像是同一 ToonHair 家族针对 canonical 外部域与 Face 域的专用 PS 变体。 | 差异可能主要来自常量、绑定或写回同值；两套完整美术模型需要更多差异项支持；现有增量还会漏掉同值写入。 | 对 PS DXIL、root signature、SRV/CBV、常量和同一 MRT 做逐项差分，并在边界像素各 debug 一次。要闭合 RT3，需用户补充有效的 EID 582 raw capture 导出。 | 每项差异都要能回指 shader 指令、绑定、Stencil 域或像素指标，且两个域分别记录，不写成同一像素上的串行覆盖。 |
 | Outline VS（P0） | 六个 outline draw 复用原 section 范围、剔除正面、写入 ID 13，并关闭 RT5 写入；这些事实确认反壳路径，但不提供扩张公式。 | 顶点阶段按 section 选择 VS 变体，在某种法线或自定义方向上扩张，可能带距离或宽度补偿。 | 可以是物体/世界空间法线挤出、观察/裁剪空间恒像素宽度，或顶点色加权混合。 | 导出 599、608、619、631、642、653 的 VS DXIL 与同顶点输入/输出，比较 position、normal、tangent 和 clip position。当前工作包缺这组 raw 输出，需要用户补充 raw capture 或授权重放导出。 | 必须同时由指令与顶点数值确认扩张空间、方向来源、宽度输入和符号，并至少在两个 section 上复现。 |
-| Kuro ID 12 / 13（P0） | 表面 PS 被确认打包 ID 12，outline PS 打包 ID 13；但实际承载通道、真实像素 mask 和 resolve 内部处理尚未闭合。 | 12/13 很可能是角色 surface 与 outline shell 在 Kuro resolve 内的子路由标记。 | 它们也可能是更一般的 material class、调试标记，或只有部分变体读取的字段。 | 在 baseline 582 与 599–653 的逐步 build-up 间导出全部 MRT；先由 output signature 定位通道，再做真实字节的 12/13 mask，并追踪 1377 的读取。需用户补充 outline raw capture 输出。 | ID mask 必须与实际 outline-only 增量一致，并在 resolve 指令中找到 12/13 的明确处理；缺任一环都不能把候选路由升级为完整语义。 |
+| Kuro ID 12 / 13（P0） | 表面 PS 被确认打包 ID 12，outline PS 打包 ID 13；但实际承载通道、真实像素 mask 和 resolve 内部处理尚未闭合。 | 12/13 很可能是角色 surface 与 outline shell 在 Kuro resolve 内的子路由标记。 | 它们也可能是更一般的 material class、调试标记，或只有部分变体读取的字段。 | 在 baseline 582 与 599–653 的逐步 build-up 间导出全部 MRT；先由 output signature 定位通道，再做真实字节的 12/13 mask，并追踪 1377 的读取。需用户补充 outline raw capture 输出。 | ID mask 必须与实际 outline-only 增量一致，并在 resolve 指令中找到 12/13 的明确处理；缺任一环时，路由停在候选层。 |
 | unnamed `MainPS`（P1） | EID 2104 写入 `R10G10B10A2` replacement backbuffer；函数名只有 `MainPS`。事件位置支持 final composite / color-grade 候选，但 tonemap、LUT 与 upscaling 的边界未解析。 | 它可能承担最终 scene composite 与显示变换中的至少一部分。 | 也可能主要负责 FSR 接口、分辨率转换、LUT 应用或多阶段合成中的单一步骤。 | 按 shader hash 记录输入输出签名、SRV/CBV、viewport、前后资源格式与差分，并跨两帧验证 lineage。若现有包缺前后 raw output，需要用户补充 EID 2104 raw capture。 | 同一 hash 在两帧保持稳定职责，且绑定、资源 lineage 与像素差分共同支持最小功能描述；否则继续只用事件号与 hash。 |
-| SSR 的材质贡献（P1） | EID 1421 写满分辨率 `R16G16B16A16_FLOAT` 的 `ResourceId::1430965`；1432 读取它及 GBuffer/environment，再写回 `ResourceId::1430956`。 | 角色上满足反射条件的像素会在 1432 合成阶段接收 SSR 或环境反射贡献。 | 某些可见高光可能主要来自环境反射或 Toon 本身；全屏资源流不能证明每个角色材质都有明显 SSR。 | 导出 1377、1421、1432 的共享 HDR ROI，并做 SSR 原值/置零 A/B；同时记录 roughness 或相关 GBuffer。当前缺 1421/1432 raw 输出，需要用户补充 raw capture。 | 资源 read-after-write、尺寸、格式、显示变换全部一致；每个材质 ROI 只报告实际测得的增量，无变化区域也必须保留。 |
-| Blender 固定条件 A/B（P2） | 现有证据支持模块映射，但没有固定条件 Blender 输出，也没有视觉等价数据。 | 按协议分层实现，比一次性拟合终帧更容易判断误差来自解码、路由、光照还是色彩管理。 | 一张相似截图可能由错误法线、灯光和曝光相互抵消，并不能证明行为一致。 | 冻结相机、姿态、灯光、世界、曝光、色彩变换、分辨率和采样，逐模块单变量 off/on；所需输入见 [TODO-BLENDER-AB](/research/wuwa-xigelika-rendering-protocol/capture-todo.md)。 | A/B 必须可配准、共享显示范围、差分可复算；每层独立标记 `exact`、`approximation` 或 `unresolved`，不得跨层同时调参。 |
+| SSR 的材质贡献（P1） | EID 1421 写满分辨率 `R16G16B16A16_FLOAT` 的 `ResourceId::1430965`；1432 读取它及 GBuffer/environment，再写回 `ResourceId::1430956`。 | 角色上满足反射条件的像素会在 1432 合成阶段接收 SSR 或环境反射贡献。 | 某些可见高光可能主要来自环境反射或 Toon 本身；全屏资源流描述资源路径，每个角色材质的 SSR 贡献由 ROI 差分给出。 | 导出 1377、1421、1432 的共享 HDR ROI，并做 SSR 原值/置零 A/B；同时记录 roughness 或相关 GBuffer。当前缺 1421/1432 raw 输出，需要用户补充 raw capture。 | 资源 read-after-write、尺寸、格式、显示变换全部一致；每个材质 ROI 只报告实际测得的增量，无变化区域也必须保留。 |
+| Blender 固定条件 A/B（P2） | 现有证据支持模块映射，但没有固定条件 Blender 输出，也没有视觉等价数据。 | 按协议分层实现，比一次性拟合终帧更容易判断误差来自解码、路由、光照还是色彩管理。 | 一张相似截图可能由错误法线、灯光和曝光相互抵消；行为一致性由逐模块 A/B 判定。 | 冻结相机、姿态、灯光、世界、曝光、色彩变换、分辨率和采样，逐模块单变量 off/on；所需输入见 [TODO-BLENDER-AB](/research/wuwa-xigelika-rendering-protocol/capture-todo.md)。 | A/B 必须可配准、共享显示范围、差分可复算；每层独立标记 `exact`、`approximation` 或 `unresolved`，不得跨层同时调参。 |
 
 ### 9.1 P0 优先于画面调参
 
