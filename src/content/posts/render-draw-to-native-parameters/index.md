@@ -8,7 +8,7 @@ imageAlt: ""
 coverPreset: "technical"
 tags: [Render, RenderDoc, IDA, Material, Lighting, Evidence]
 category: "Rendering"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "相同权重还需配合相同的骨骼矩阵、静置关系和动画时刻，才能比较形变"
 tags: [Blender, Unreal Engine, Skinning, LBS, Rigging]
 category: "Blender"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

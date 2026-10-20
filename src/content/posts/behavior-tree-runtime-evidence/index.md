@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "搜索等待和直接追敌是不同分支，需要活动节点记录才能解释当前停顿"
 tags: [Unreal Engine, Behavior Tree, AI, EQS, Evidence]
 category: "Unreal Engine"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

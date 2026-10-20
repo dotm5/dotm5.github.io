@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "骨骼 rest basis 改变后，通过动画重基保持采样姿态"
 tags: [Blender, BoneWeaver, Animation, Rigging]
 category: "Blender"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

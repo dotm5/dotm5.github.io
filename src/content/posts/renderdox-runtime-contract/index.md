@@ -15,7 +15,7 @@ tags:
   - Windows
   - MSBuild
 category: "Projects"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

@@ -16,7 +16,7 @@ tags:
   - Capture
   - Validation
 category: "Rendering"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

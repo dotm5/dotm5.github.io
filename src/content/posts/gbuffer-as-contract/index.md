@@ -11,7 +11,7 @@ tags:
   - Deferred Rendering
   - NPR
 category: "Shader"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

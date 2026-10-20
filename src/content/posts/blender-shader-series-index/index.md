@@ -9,7 +9,7 @@ tags:
   - Rendering
   - Notes
 category: "Notes"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 
