@@ -14,18 +14,29 @@ import {
 } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
+import type { BannerPosition } from "../utils/post-media";
 import { pathsEqual, url } from "../utils/url-utils";
 import "katex/dist/katex.css";
 
 interface Props {
 	title?: string;
 	banner?: string;
+	bannerPosition?: BannerPosition;
 	description?: string;
 	lang?: string;
 	setOGTypeArticle?: boolean;
+	pagefindIgnore?: boolean;
 }
 
-let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
+let {
+	title,
+	banner,
+	bannerPosition,
+	description,
+	lang,
+	setOGTypeArticle,
+	pagefindIgnore,
+} = Astro.props;
 const siteBase = Astro.site ?? new URL(Astro.url.origin);
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
 const defaultOgImage = new URL(url("/branding/og-default.png"), siteBase);
@@ -39,12 +50,15 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 const themeColorFixed = siteConfig.themeColor.fixed;
-if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner = siteConfig.banner.src;
-}
-
-// TODO don't use post cover as banner for now
-banner = siteConfig.banner.src;
+const customBanner = typeof banner === "string" ? banner.trim() : "";
+const hasCustomBanner = customBanner.length > 0;
+const resolvedBannerPosition =
+	bannerPosition ?? siteConfig.banner.position ?? "center";
+const ogImage = hasCustomBanner
+	? /^https?:\/\//i.test(customBanner)
+		? new URL(customBanner)
+		: new URL(url(customBanner), siteBase)
+	: defaultOgImage;
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -70,8 +84,7 @@ const bannerOffsetByPosition = {
 	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
 	bottom: "0",
 };
-const bannerOffset =
-	bannerOffsetByPosition[siteConfig.banner.position || "center"];
+const bannerOffset = bannerOffsetByPosition[resolvedBannerPosition];
 ---
 
 <!DOCTYPE html>
@@ -95,7 +108,7 @@ const bannerOffset =
 		<meta property="og:title" content={pageTitle}>
 		<meta property="og:description" content={metaDescription}>
 		<meta property="og:locale" content={siteConfig.lang}>
-		<meta property="og:image" content={defaultOgImage}>
+		<meta property="og:image" content={ogImage}>
 		<meta property="og:image:alt" content="图形与创作笔记的抽象节点与光环图形">
 		{setOGTypeArticle ? (
         <meta property="og:type" content="article" />
@@ -107,7 +120,7 @@ const bannerOffset =
 		<meta property="twitter:url" content={canonicalURL}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={metaDescription}>
-		<meta name="twitter:image" content={defaultOgImage}>
+		<meta name="twitter:image" content={ogImage}>
 		<meta name="twitter:image:alt" content="图形与创作笔记的抽象节点与光环图形">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -168,6 +181,7 @@ const bannerOffset =
 
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
+		  data-pagefind-ignore={pagefindIgnore ? true : undefined}
 		  data-overlayscrollbars-initialize
 	>
 		<ConfigCarrier></ConfigCarrier>

@@ -75,6 +75,43 @@ content:
         description: 有封面时请准确描述画面；纯装饰图片可留空。
         options:
           maxlength: 240
+      - name: coverPreset
+        label: 无封面时的预设
+        type: select
+        default: default
+        description: 没有自定义封面时使用；找不到预设图片会回退到全站 banner。
+        options:
+          values:
+            - name: default
+              label: 默认封面
+            - name: daily
+              label: 日常封面
+            - name: notes
+              label: Notes 封面
+            - name: technical
+              label: 技术封面
+            - name: none
+              label: 不使用默认封面
+      - name: banner
+        label: 文章横幅
+        type: image
+        description: 文章页顶部横幅；留空时使用全站默认 banner。
+        options:
+          media: article_images
+          extensions: [avif, gif, jpeg, jpg, png, webp]
+          rename: safe
+      - name: bannerPosition
+        label: 文章横幅对齐
+        type: select
+        description: 留空或使用默认值时跟随站点设置。
+        options:
+          values:
+            - name: top
+              label: 顶部
+            - name: center
+              label: 居中
+            - name: bottom
+              label: 底部
       - name: tags
         label: 标签
         type: string
@@ -103,6 +140,8 @@ content:
               label: Projects
             - name: Notes
               label: Notes
+            - name: 日常
+              label: 日常（仅归档）
       - name: draft
         label: 草稿
         type: boolean

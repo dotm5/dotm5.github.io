@@ -44,6 +44,8 @@ Fuwari 的布局、卡片、侧栏、Swup 页面切换、搜索 UI、Markdown �
 
 生产构建通过 `draft !== true` 排除草稿。`style-sandbox` 仅用于本地视觉回归。
 
+“日常”是一个低优先级分类。文章页面仍会生成，但日常文章默认不进入主页时间线、默认归档列表、RSS 和 Pagefind；归档页仅在显式使用 `?category=日常` 时显示它们。分类入口由侧栏的分类列表提供，并固定排在末尾。
+
 ## 部署模型
 
 GitHub Pages 使用官方 Astro Action 构建并上传 `dist/`。大陆服务器方案同样只发布 `dist/`，通过时间戳 release 目录与 `current` 软链接完成原子切换和回滚。
@@ -57,3 +59,7 @@ GitHub Pages 使用官方 Astro Action 构建并上传 `dist/`。大陆服务器
 - Pagefind 输出结构及搜索初始化
 - Astro / Svelte / Tailwind 的 major 升级
 - 严格 CSP；当前上游包含内联脚本，启用前必须先审计
+
+## 文章媒体解析
+
+文章媒体由 src/utils/post-media.ts 作为兼容层解析。现有 image 字段继续表示明确的文章封面；coverPreset 只在没有明确封面时生效，并从 public/uploads/ 中按命名约定选择预设图片，找不到时回退到全站 banner。文章 banner 和 bannerPosition 也是可选字段，未提供时继续使用站点默认值。这样未来替换卡片、文章布局或 CMS 组件时，文章 frontmatter 不需要跟着上游组件 API 改动。

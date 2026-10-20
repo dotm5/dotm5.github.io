@@ -17,7 +17,7 @@ function stripInvalidXmlChars(str: string): string {
 }
 
 export async function GET(context: APIContext) {
-	const blog = await getSortedPosts();
+	const blog = await getSortedPosts({ includeDaily: false });
 
 	return rss({
 		title: siteConfig.title,

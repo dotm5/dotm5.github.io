@@ -1,6 +1,7 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
+import { isDailyCategory } from "../constants/constants";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import { getPostUrlBySlug } from "../utils/url-utils";
@@ -42,7 +43,14 @@ function formatTag(tagList: string[]) {
 }
 
 onMount(async () => {
-	let filteredPosts: Post[] = sortedPosts;
+	const hasDailyCategoryFilter = categories.some((category) =>
+		isDailyCategory(category),
+	);
+	let filteredPosts: Post[] = sortedPosts.filter((post) =>
+		hasDailyCategoryFilter
+			? isDailyCategory(post.data.category)
+			: !isDailyCategory(post.data.category),
+	);
 
 	if (tags.length > 0) {
 		filteredPosts = filteredPosts.filter(
@@ -54,7 +62,12 @@ onMount(async () => {
 
 	if (categories.length > 0) {
 		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
+			(post) =>
+				post.data.category &&
+				categories.some(
+					(category) =>
+						category.trim() === post.data.category?.trim(),
+				),
 		);
 	}
 
