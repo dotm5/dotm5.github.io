@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "已编码的显示 RGB 再经过一次 sRGB OETF，偏离直接量化路径"
 tags: [RenderDoc, Color Management, sRGB, Validation]
 category: "Rendering"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

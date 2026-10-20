@@ -11,7 +11,7 @@ tags:
   - SDF
   - NPR
 category: "Blender"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

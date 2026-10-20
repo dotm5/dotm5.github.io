@@ -16,7 +16,7 @@ tags:
   - MSBuild
   - Validation
 category: "Projects"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

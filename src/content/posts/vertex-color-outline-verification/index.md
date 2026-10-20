@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "六条描边 draw 的数值验证与一像素屏幕偏移"
 tags: [Shader, RenderDoc, HLSL, Outline, Validation]
 category: "Shader"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 

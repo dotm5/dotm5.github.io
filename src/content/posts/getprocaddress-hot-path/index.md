@@ -6,7 +6,7 @@ image: "./cover.webp"
 imageAlt: "直接注入与 DXGI proxy 两组热路径平均耗时的前后对照"
 tags: [C++, Windows, Performance, RenderDoc]
 category: "Projects"
-draft: true
+draft: false
 lang: "zh_CN"
 ---
 
