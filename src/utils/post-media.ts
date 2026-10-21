@@ -85,8 +85,12 @@ function getPublicCoverCandidates(preset: string): string[] {
 
 	const uploadsDirectory = path.join(process.cwd(), "public", "uploads");
 	const prefixes = presetPrefixes[normalizedPreset];
-	const candidates = collectImages(uploadsDirectory)
-		.filter(({ name }) => prefixes.some((prefix) => name.startsWith(prefix)))
+	const images = collectImages(uploadsDirectory);
+	const prefix = prefixes.find((candidate) =>
+		images.some(({ name }) => name.startsWith(candidate)),
+	);
+	const candidates = images
+		.filter(({ name }) => prefix && name.startsWith(prefix))
 		.sort((a, b) => a.relativePath.localeCompare(b.relativePath, "en"))
 		.map(
 			({ relativePath }) =>

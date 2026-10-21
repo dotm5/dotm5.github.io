@@ -48,6 +48,11 @@ const resolvedBannerPosition = resolveBannerPosition(
 	bannerPosition,
 	siteConfig.banner.position ?? "center",
 );
+const bannerOffset = {
+	top: `${BANNER_HEIGHT_EXTEND}vh`,
+	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
+	bottom: "0",
+}[resolvedBannerPosition];
 const hasBannerCredit =
 	!resolvedBanner.hasCustomBanner &&
 	siteConfig.banner.enable &&
@@ -59,7 +64,7 @@ const mainPanelTop = siteConfig.banner.enable
 	: "5.5rem";
 ---
 
-<Layout title={title} banner={banner} bannerPosition={resolvedBannerPosition} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle} pagefindIgnore={pagefindIgnore}>
+<Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle} pagefindIgnore={pagefindIgnore}>
 
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
@@ -70,12 +75,12 @@ const mainPanelTop = siteConfig.banner.enable
 </div>
 
 <!-- Banner -->
-{siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
-    <ImageWrapper id="banner" alt="" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
+<div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh; --banner-offset: ${bannerOffset}`}>
+    {siteConfig.banner.enable && <ImageWrapper id="banner" alt="" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
                   src={resolvedBanner.banner} position={resolvedBannerPosition}
     >
-    </ImageWrapper>
-</div>}
+    </ImageWrapper>}
+</div>
 
 <!-- Main content -->
 <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
@@ -85,6 +90,7 @@ const mainPanelTop = siteConfig.banner.enable
     mx-auto gap-4 px-0 md:px-4"
         >
             <!-- Banner image credit -->
+            <div id="banner-credit-wrapper" class="contents">
             {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
                                    "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
@@ -96,6 +102,7 @@ const mainPanelTop = siteConfig.banner.enable
                       name="fa6-solid:arrow-up-right-from-square">
                 </Icon>
             </a>}
+            </div>
 
 
             <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings}></SideBar>

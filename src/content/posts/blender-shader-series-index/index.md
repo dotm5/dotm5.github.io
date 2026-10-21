@@ -21,20 +21,20 @@ lang: "zh_CN"
 
 | 文章 | 主题 | 难度 | 适合读者 | 配图状态 |
 | --- | --- | --- | --- | --- |
-| 从一帧画面到材质行为 | 证据链与分析方法 | 中 | 想建立分析框架的人 | 架构图、材质图、结果预览 |
-| GBuffer 不是最终颜色 | 延迟渲染与数据合同 | 中高 | 图形程序员、技术美术 | 载荷预览、模块图 |
-| Face SDF 与 Ramp | 面部风格化明暗 | 中 | Blender 材质作者 | SDF、Ramp、结果预览 |
-| Eye Shading Stack | 眼睛独立材质与视差 | 中 | 角色技术美术 | 眼睛贴图、遮罩 |
-| Hair Directional Highlights | 头发方向场与带状高光 | 中高 | NPR/角色 Shader 作者 | 方向场、高光遮罩 |
-| Cloth FX Layers | 布料的多层材质职责 | 中 | 材质与效果作者 | Flowmap、Matcap、结果 |
-| Outline as Geometry | 几何描边与屏幕空间互补 | 中 | Blender/实时渲染作者 | 描边预览、几何架构 |
-| NPR to Eevee Architecture | Profile 化迁移与模块边界 | 中高 | 做跨项目工具的人 | 节点/模块连接图 |
-| Strict Fallback | 证据不足时的保守重建 | 中 | 研究型工作流使用者 | 证据等级图 |
-| Fixed-Condition Validation | 固定条件 A/B 验收 | 中 | 需要稳定迭代的人 | 验证架构、结果预览 |
+| [从一帧画面到材质行为](/posts/from-frame-to-behavior/) | 证据链与分析方法 | 中 | 想建立分析框架的人 | 架构图、材质图、结果预览 |
+| [GBuffer 不是最终颜色](/posts/gbuffer-as-contract/) | 延迟渲染与数据合同 | 中高 | 图形程序员、技术美术 | 载荷预览、模块图 |
+| [Face SDF 与 Ramp](/posts/face-sdf-and-ramp/) | 面部风格化明暗 | 中 | Blender 材质作者 | SDF、Ramp、结果预览 |
+| [Eye Shading Stack](/posts/eye-shading-stack/) | 眼睛独立材质与视差 | 中 | 角色技术美术 | 眼睛贴图、遮罩 |
+| [Hair Directional Highlights](/posts/hair-directional-highlights/) | 头发方向场与带状高光 | 中高 | NPR/角色 Shader 作者 | 方向场、高光遮罩 |
+| [Cloth FX Layers](/posts/cloth-fx-layers/) | 布料的多层材质职责 | 中 | 材质与效果作者 | Flowmap、Matcap、结果 |
+| [Outline as Geometry](/posts/outline-as-geometry/) | 几何描边与屏幕空间互补 | 中 | Blender/实时渲染作者 | 描边预览、几何架构 |
+| [NPR to Eevee Architecture](/posts/npr-to-eevee-architecture/) | Profile 化迁移与模块边界 | 中高 | 做跨项目工具的人 | 节点/模块连接图 |
+| [Strict Fallback](/posts/strict-fallback/) | 证据不足时的保守重建 | 中 | 研究型工作流使用者 | 证据等级图 |
+| [Fixed-Condition Validation](/posts/fixed-condition-validation/) | 固定条件 A/B 验收 | 中 | 需要稳定迭代的人 | 验证架构、结果预览 |
 
 ## 推荐阅读顺序
 
-先读“从一帧画面到材质行为”，建立事实、推断、候选与未知的分层；接着读 GBuffer、Face、Eye、Hair 和 Cloth，理解角色材质如何拆职责；再读描边与 Eevee 架构，把这些职责放回 Blender 的材质、几何节点与合成器；最后用 Strict Fallback 和 Fixed-Condition Validation 约束结论。
+先读[从一帧画面到材质行为](/posts/from-frame-to-behavior/)，建立事实、推断、候选与未知的分层；接着读 [GBuffer](/posts/gbuffer-as-contract/)、[Face](/posts/face-sdf-and-ramp/)、[Eye](/posts/eye-shading-stack/)、[Hair](/posts/hair-directional-highlights/) 和 [Cloth](/posts/cloth-fx-layers/)，理解角色材质如何拆职责；再读[描边](/posts/outline-as-geometry/)与 [Eevee 架构](/posts/npr-to-eevee-architecture/)，把这些职责放回 Blender 的材质、几何节点与合成器；最后用 [Strict Fallback](/posts/strict-fallback/) 和 [Fixed-Condition Validation](/posts/fixed-condition-validation/) 约束结论。
 
 ## 标签约定
 
@@ -51,7 +51,7 @@ lang: "zh_CN"
 
 ## 当前配图缺口
 
-现有配图已经足够支撑第一版草稿，但以下位置仍适合后续补一套完全通用的示意图：
+现有配图已用于第一版发布，以下位置仍适合后续补一套完全通用的示意图：
 
 - Face：一张不带项目标识的“头部空间 → SDF → Ramp → Face Mask”流程图；
 - Hair：一张“区域 × 方向 × 响应”的三段式高光图；
@@ -59,4 +59,4 @@ lang: "zh_CN"
 - Outline：一张反壳轮廓与屏幕空间边缘的并排对照；
 - Validation：一张固定相机/灯光下的 Baseline、A/B、差分接触表。
 
-当前文章中的原始纹理预览只用于帮助理解材质形态，通用流程图单独补充。所有文章目前都是草稿，尚未进入发布状态；是否公开项目名、是否替换角色预览图、是否需要补充 Blender 版本和可运行示例，均待定。
+本目录与以上 10 篇文章已于 2026 年 10 月 20 日发布。当前文章中的原始纹理预览用于帮助理解材质形态；通用流程图、Blender 版本说明与可运行示例将在后续更新中补充。

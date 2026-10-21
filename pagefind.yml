@@ -1,6 +1,7 @@
+# Pagefind handles data-pagefind-ignore natively, including its "all" value.
+# Adding that attribute here overrides "all" with the selector's index-only mode.
 exclude_selectors:
   - "span.katex"
   - "span.katex-display"
-  - "[data-pagefind-ignore]"
   - ".search-panel"
   - "#search-panel"

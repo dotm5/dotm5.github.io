@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
-import { isDailyCategory } from "../constants/constants";
+import { filterArchivePosts } from "../utils/archive-filter";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import { getPostUrlBySlug } from "../utils/url-utils";
@@ -43,37 +43,11 @@ function formatTag(tagList: string[]) {
 }
 
 onMount(async () => {
-	const hasDailyCategoryFilter = categories.some((category) =>
-		isDailyCategory(category),
-	);
-	let filteredPosts: Post[] = sortedPosts.filter((post) =>
-		hasDailyCategoryFilter
-			? isDailyCategory(post.data.category)
-			: !isDailyCategory(post.data.category),
-	);
-
-	if (tags.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) =>
-				Array.isArray(post.data.tags) &&
-				post.data.tags.some((tag) => tags.includes(tag)),
-		);
-	}
-
-	if (categories.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) =>
-				post.data.category &&
-				categories.some(
-					(category) =>
-						category.trim() === post.data.category?.trim(),
-				),
-		);
-	}
-
-	if (uncategorized) {
-		filteredPosts = filteredPosts.filter((post) => !post.data.category);
-	}
+	const filteredPosts = filterArchivePosts(sortedPosts, {
+		tags,
+		categories,
+		uncategorized: !!uncategorized,
+	});
 
 	const grouped = filteredPosts.reduce(
 		(acc, post) => {

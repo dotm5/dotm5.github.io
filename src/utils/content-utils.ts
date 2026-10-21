@@ -3,12 +3,15 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { getCategoryUrl } from "@utils/url-utils.ts";
 import { isDailyCategory } from "@constants/constants";
+import { withPostNavigation } from "./post-navigation";
 
 type PostQueryOptions = {
 	includeDaily?: boolean;
 };
 
-async function getPostCollection({ includeDaily = false }: PostQueryOptions = {}) {
+async function getPostCollection({
+	includeDaily = false,
+}: PostQueryOptions = {}) {
 	return getCollection<"posts">("posts", ({ data }) => {
 		const isPublished = import.meta.env.PROD ? data.draft !== true : true;
 		return isPublished && (includeDaily || !isDailyCategory(data.category));
@@ -29,17 +32,7 @@ async function getRawSortedPosts(options: PostQueryOptions = {}) {
 
 export async function getSortedPosts(options: PostQueryOptions = {}) {
 	const sorted = await getRawSortedPosts(options);
-
-	for (let i = 1; i < sorted.length; i++) {
-		sorted[i].data.nextSlug = sorted[i - 1].slug;
-		sorted[i].data.nextTitle = sorted[i - 1].data.title;
-	}
-	for (let i = 0; i < sorted.length - 1; i++) {
-		sorted[i].data.prevSlug = sorted[i + 1].slug;
-		sorted[i].data.prevTitle = sorted[i + 1].data.title;
-	}
-
-	return sorted;
+	return withPostNavigation(sorted);
 }
 export type PostForList = {
 	slug: string;
