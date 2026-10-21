@@ -22,8 +22,10 @@
     "lint": "biome check --write ./src ./scripts",
     "lint:check": "biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts",
     "validate:dist": "node scripts/validate-dist.mjs",
-    "verify": "node scripts/validate-content-safety.mjs && node scripts/check-design-contrast.mjs && astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs",
-    "preinstall": "npx only-allow pnpm"
+    "verify": "node scripts/validate-content-safety.mjs && node scripts/check-design-contrast.mjs && node --test scripts/regressions.test.mjs && astro check && biome check --formatter-enabled=false --assist-enabled=false ./src ./scripts && astro build && pagefind --site dist && node scripts/validate-dist.mjs && node --test scripts/published-output.test.mjs",
+    "preinstall": "npx only-allow pnpm",
+    "test": "node --test scripts/regressions.test.mjs",
+    "test:dist": "node --test scripts/published-output.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",

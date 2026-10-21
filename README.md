@@ -60,7 +60,7 @@ corepack pnpm new-post:dir shader-notes
 corepack pnpm verify
 ```
 
-该命令依次执行 Astro 检查、只读 lint、生产构建、Pagefind 索引和静态产物验证。单独构建：
+该命令依次执行内容安全与对比度校验、逻辑回归测试、Astro 检查、只读 lint、生产构建、Pagefind 索引和静态产物回归测试。`pnpm test` 单独运行 RSS 渲染、文章导航、归档筛选与封面预设测试；`pnpm test:dist` 检查已构建的 RSS、文章导航、系列目录、Pagefind 索引与 Swup 容器。单独构建：
 
 ```bash
 corepack pnpm build
